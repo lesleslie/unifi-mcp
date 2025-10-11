@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../opera-cloud-mcp/.idea/opera-cloud-mcp.iml" filepath="$PROJECT_DIR$/../opera-cloud-mcp/.idea/opera-cloud-mcp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../raindropio-mcp/.idea/raindropio-mcp.iml" filepath="$PROJECT_DIR$/../raindropio-mcp/.idea/raindropio-mcp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/unifi-mcp.iml" filepath="$PROJECT_DIR$/.idea/unifi-mcp.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,2 @@
+fastmcp>=2.12.3
+pydantic[email]>=2.11.9

@@ -1,0 +1,7 @@
+/.venv/
+/.envrc
+/.benchmarks/
+/.claude/
+/htmlcov/
+/__pycache__/
+__pycache__/
