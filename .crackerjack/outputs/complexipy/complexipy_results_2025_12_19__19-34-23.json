@@ -1,0 +1,356 @@
+[
+  {
+    "complexity": 0,
+    "file_name": "create_tool_decorator.py",
+    "function_name": "tool",
+    "path": "create_tool_decorator.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "server.py",
+    "function_name": "_create_access_client",
+    "path": "server.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "server.py",
+    "function_name": "_create_network_client",
+    "path": "server.py"
+  },
+  {
+    "complexity": 3,
+    "file_name": "server.py",
+    "function_name": "create_server",
+    "path": "server.py"
+  },
+  {
+    "complexity": 10,
+    "file_name": "server.py",
+    "function_name": "_register_access_tools",
+    "path": "server.py"
+  },
+  {
+    "complexity": 16,
+    "file_name": "server.py",
+    "function_name": "_register_network_tools",
+    "path": "server.py"
+  },
+  {
+    "complexity": 17,
+    "file_name": "server.py",
+    "function_name": "run_server",
+    "path": "server.py"
+  },
+  {
+    "complexity": 8,
+    "file_name": "config.py",
+    "function_name": "Settings::validate_credentials_at_startup",
+    "path": "config.py"
+  },
+  {
+    "complexity": 10,
+    "file_name": "config.py",
+    "function_name": "Settings::get_masked_password",
+    "path": "config.py"
+  },
+  {
+    "complexity": 15,
+    "file_name": "config.py",
+    "function_name": "_validate_unifi_credentials",
+    "path": "config.py"
+  },
+  {
+    "complexity": 4,
+    "file_name": "cli.py",
+    "function_name": "config",
+    "path": "cli.py"
+  },
+  {
+    "complexity": 7,
+    "file_name": "cli.py",
+    "function_name": "test_connection",
+    "path": "cli.py"
+  },
+  {
+    "complexity": 8,
+    "file_name": "cli.py",
+    "function_name": "main",
+    "path": "cli.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "main.py",
+    "function_name": "main",
+    "path": "main.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "base_client.py",
+    "function_name": "BaseUniFiClient::__aenter__",
+    "path": "base_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "base_client.py",
+    "function_name": "BaseUniFiClient::__aexit__",
+    "path": "base_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "base_client.py",
+    "function_name": "BaseUniFiClient::__init__",
+    "path": "base_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "base_client.py",
+    "function_name": "BaseUniFiClient::authenticate",
+    "path": "base_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "base_client.py",
+    "function_name": "BaseUniFiClient::close",
+    "path": "base_client.py"
+  },
+  {
+    "complexity": 5,
+    "file_name": "base_client.py",
+    "function_name": "BaseUniFiClient::_make_request",
+    "path": "base_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "access_client.py",
+    "function_name": "AccessClient::__init__",
+    "path": "access_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "access_client.py",
+    "function_name": "AccessClient::set_access_schedule",
+    "path": "access_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "access_client.py",
+    "function_name": "AccessClient::unlock_door",
+    "path": "access_client.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "access_client.py",
+    "function_name": "AccessClient::get_access_points",
+    "path": "access_client.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "access_client.py",
+    "function_name": "AccessClient::get_door_access_logs",
+    "path": "access_client.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "access_client.py",
+    "function_name": "AccessClient::get_users",
+    "path": "access_client.py"
+  },
+  {
+    "complexity": 8,
+    "file_name": "access_client.py",
+    "function_name": "AccessClient::authenticate",
+    "path": "access_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::__init__",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::disable_ap",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::enable_ap",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::get_statistics",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::restart_device",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::get_clients",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::get_devices",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::get_sites",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::get_wlans",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 8,
+    "file_name": "network_client.py",
+    "function_name": "NetworkClient::authenticate",
+    "path": "network_client.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_tools.py",
+    "function_name": "disable_unifi_ap",
+    "path": "network_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_tools.py",
+    "function_name": "enable_unifi_ap",
+    "path": "network_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_tools.py",
+    "function_name": "get_unifi_clients",
+    "path": "network_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_tools.py",
+    "function_name": "get_unifi_devices",
+    "path": "network_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_tools.py",
+    "function_name": "get_unifi_sites",
+    "path": "network_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_tools.py",
+    "function_name": "get_unifi_statistics",
+    "path": "network_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_tools.py",
+    "function_name": "get_unifi_wlans",
+    "path": "network_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "network_tools.py",
+    "function_name": "restart_unifi_device",
+    "path": "network_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "access_tools.py",
+    "function_name": "get_unifi_access_logs",
+    "path": "access_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "access_tools.py",
+    "function_name": "get_unifi_access_points",
+    "path": "access_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "access_tools.py",
+    "function_name": "get_unifi_access_users",
+    "path": "access_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "access_tools.py",
+    "function_name": "set_unifi_access_schedule",
+    "path": "access_tools.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "access_tools.py",
+    "function_name": "unlock_unifi_door",
+    "path": "access_tools.py"
+  },
+  {
+    "complexity": 1,
+    "file_name": "retry_utils.py",
+    "function_name": "_calculate_delay",
+    "path": "retry_utils.py"
+  },
+  {
+    "complexity": 10,
+    "file_name": "retry_utils.py",
+    "function_name": "retry_with_backoff",
+    "path": "retry_utils.py"
+  },
+  {
+    "complexity": 14,
+    "file_name": "retry_utils.py",
+    "function_name": "retry_async",
+    "path": "retry_utils.py"
+  },
+  {
+    "complexity": 0,
+    "file_name": "process_utils.py",
+    "function_name": "ServerManager::__init__",
+    "path": "process_utils.py"
+  },
+  {
+    "complexity": 2,
+    "file_name": "process_utils.py",
+    "function_name": "ServerManager::get_pid",
+    "path": "process_utils.py"
+  },
+  {
+    "complexity": 2,
+    "file_name": "process_utils.py",
+    "function_name": "ServerManager::get_status",
+    "path": "process_utils.py"
+  },
+  {
+    "complexity": 2,
+    "file_name": "process_utils.py",
+    "function_name": "ServerManager::is_running",
+    "path": "process_utils.py"
+  },
+  {
+    "complexity": 2,
+    "file_name": "process_utils.py",
+    "function_name": "ServerManager::start_server",
+    "path": "process_utils.py"
+  },
+  {
+    "complexity": 5,
+    "file_name": "process_utils.py",
+    "function_name": "ServerManager::stop_server",
+    "path": "process_utils.py"
+  }
+]

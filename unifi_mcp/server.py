@@ -1,9 +1,19 @@
 """Main FastMCP server for UniFi integration."""
 
+import importlib.util
 import logging
+import sys
 from typing import Any
 
 from fastmcp import FastMCP
+
+# Check FastMCP rate limiting middleware availability (Phase 3.3 M2: improved pattern)
+RATE_LIMITING_AVAILABLE = (
+    importlib.util.find_spec("fastmcp.server.middleware.rate_limiting") is not None
+)
+
+# Check ServerPanels availability (Phase 3.3 M2: improved pattern)
+SERVERPANELS_AVAILABLE = importlib.util.find_spec("mcp_common.ui") is not None
 
 from unifi_mcp.clients.access_client import AccessClient
 from unifi_mcp.clients.network_client import NetworkClient
@@ -33,6 +43,19 @@ def create_server(settings: Settings) -> FastMCP:
     server = FastMCP(
         name="UniFi Controller MCP Server",
     )
+
+    # Add rate limiting middleware to protect UniFi API from excessive requests
+    if RATE_LIMITING_AVAILABLE:
+        from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
+
+        # UniFi controllers typically handle 10-20 requests/sec well
+        # Use token bucket algorithm for burst handling
+        rate_limiter = RateLimitingMiddleware(
+            max_requests_per_second=10.0,  # Sustainable rate
+            burst_capacity=20,  # Allow brief bursts
+            global_limit=True,  # Protect the UniFi controller globally
+        )
+        server.add_middleware(rate_limiter)
 
     # Initialize clients
     network_client = _create_network_client(settings)
@@ -78,244 +101,312 @@ def _create_access_client(settings: Settings) -> AccessClient | None:
 
 def _register_network_tools(server: FastMCP, network_client: NetworkClient) -> None:
     """Register network tools with the server."""
-    _create_get_sites_tool(network_client)
-    _create_get_devices_tool(network_client)
-    _create_get_clients_tool(network_client)
-    _create_get_wlans_tool(network_client)
-    _create_restart_device_tool(network_client)
-    _create_disable_ap_tool(network_client)
-    _create_enable_ap_tool(network_client)
-    _create_get_statistics_tool(network_client)
+    _register_site_tools(server, network_client)
+    _register_device_tools(server, network_client)
+    _register_client_tools(server, network_client)
+    _register_wlan_tools(server, network_client)
+    _register_device_control_tools(server, network_client)
+    _register_statistics_tools(server, network_client)
 
 
-def _create_get_sites_tool(network_client: NetworkClient) -> None:
-    """Create the get_sites tool."""
+def _register_site_tools(server: FastMCP, network_client: NetworkClient) -> None:
+    """Register site-related tools."""
 
-    async def get_sites_tool() -> list[dict[str, Any]]:
+    @server.tool()
+    async def unifi_get_sites() -> list[dict[str, Any]]:
+        """Get all sites from the UniFi Network Controller"""
         result = await get_unifi_sites(network_client)
-        # Ensure the return value matches the expected type
         if isinstance(result, list):
             return result
         return []
 
-    get_sites_tool.__name__ = "get_unifi_sites"
-    get_sites_tool.__doc__ = "Get all sites from the UniFi Network Controller"
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
 
+def _register_device_tools(server: FastMCP, network_client: NetworkClient) -> None:
+    """Register device-related tools."""
 
-def _create_get_devices_tool(network_client: NetworkClient) -> None:
-    """Create the get_devices tool."""
+    @server.tool()
+    async def unifi_get_devices(site_id: str = "default") -> list[dict[str, Any]]:
+        """Get all devices in a specific site from the UniFi Network Controller.
 
-    async def get_devices_tool(site_id: str = "default") -> list[dict[str, Any]]:
+        Args:
+            site_id: The site ID to query (defaults to 'default')
+        """
         result = await get_unifi_devices(network_client, site_id)
-        # Ensure the return value matches the expected type
         if isinstance(result, list):
             return result
         return []
 
-    get_devices_tool.__name__ = "get_unifi_devices"
-    get_devices_tool.__doc__ = "Get all devices in a specific site from the UniFi Network Controller. Takes an optional site_id parameter (defaults to 'default')."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
 
+def _register_client_tools(server: FastMCP, network_client: NetworkClient) -> None:
+    """Register client-related tools."""
 
-def _create_get_clients_tool(network_client: NetworkClient) -> None:
-    """Create the get_clients tool."""
+    @server.tool()
+    async def unifi_get_clients(site_id: str = "default") -> list[dict[str, Any]]:
+        """Get all clients in a specific site from the UniFi Network Controller.
 
-    async def get_clients_tool(site_id: str = "default") -> list[dict[str, Any]]:
+        Args:
+            site_id: The site ID to query (defaults to 'default')
+        """
         result = await get_unifi_clients(network_client, site_id)
-        # Ensure the return value matches the expected type
         if isinstance(result, list):
             return result
         return []
 
-    get_clients_tool.__name__ = "get_unifi_clients"
-    get_clients_tool.__doc__ = "Get all clients in a specific site from the UniFi Network Controller. Takes an optional site_id parameter (defaults to 'default')."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
 
+def _register_wlan_tools(server: FastMCP, network_client: NetworkClient) -> None:
+    """Register WLAN-related tools."""
 
-def _create_get_wlans_tool(network_client: NetworkClient) -> None:
-    """Create the get_wlans tool."""
+    @server.tool()
+    async def unifi_get_wlans(site_id: str = "default") -> list[dict[str, Any]]:
+        """Get all WLANs in a specific site from the UniFi Network Controller.
 
-    async def get_wlans_tool(site_id: str = "default") -> list[dict[str, Any]]:
+        Args:
+            site_id: The site ID to query (defaults to 'default')
+        """
         result = await get_unifi_wlans(network_client, site_id)
-        # Ensure the return value matches the expected type
         if isinstance(result, list):
             return result
         return []
 
-    get_wlans_tool.__name__ = "get_unifi_wlans"
-    get_wlans_tool.__doc__ = "Get all WLANs in a specific site from the UniFi Network Controller. Takes an optional site_id parameter (defaults to 'default')."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
 
+def _register_device_control_tools(
+    server: FastMCP, network_client: NetworkClient
+) -> None:
+    """Register device control tools."""
 
-def _create_restart_device_tool(network_client: NetworkClient) -> None:
-    """Create the restart_device tool."""
+    @server.tool()
+    async def unifi_restart_device(
+        mac: str, site_id: str = "default"
+    ) -> dict[str, Any]:
+        """Restart a device by its MAC address in the UniFi Network Controller.
 
-    async def restart_device_tool(mac: str, site_id: str = "default") -> dict[str, Any]:
+        Args:
+            mac: The MAC address of the device to restart
+            site_id: The site ID (defaults to 'default')
+        """
         result = await restart_unifi_device(network_client, mac, site_id)
-        # Ensure the return value matches the expected type
         if isinstance(result, dict):
             return result
         return {}
 
-    restart_device_tool.__name__ = "restart_unifi_device"
-    restart_device_tool.__doc__ = "Restart a device by its MAC address in the UniFi Network Controller. Takes a required mac address and an optional site_id parameter (defaults to 'default')."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
+    @server.tool()
+    async def unifi_disable_ap(mac: str, site_id: str = "default") -> dict[str, Any]:
+        """Disable an access point by its MAC address in the UniFi Network Controller.
 
-
-def _create_disable_ap_tool(network_client: NetworkClient) -> None:
-    """Create the disable_ap tool."""
-
-    async def disable_ap_tool(mac: str, site_id: str = "default") -> dict[str, Any]:
+        Args:
+            mac: The MAC address of the access point to disable
+            site_id: The site ID (defaults to 'default')
+        """
         result = await disable_unifi_ap(network_client, mac, site_id)
-        # Ensure the return value matches the expected type
         if isinstance(result, dict):
             return result
         return {}
 
-    disable_ap_tool.__name__ = "disable_unifi_ap"
-    disable_ap_tool.__doc__ = "Disable an access point by its MAC address in the UniFi Network Controller. Takes a required mac address and an optional site_id parameter (defaults to 'default')."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
+    @server.tool()
+    async def unifi_enable_ap(mac: str, site_id: str = "default") -> dict[str, Any]:
+        """Enable an access point by its MAC address in the UniFi Network Controller.
 
-
-def _create_enable_ap_tool(network_client: NetworkClient) -> None:
-    """Create the enable_ap tool."""
-
-    async def enable_ap_tool(mac: str, site_id: str = "default") -> dict[str, Any]:
+        Args:
+            mac: The MAC address of the access point to enable
+            site_id: The site ID (defaults to 'default')
+        """
         result = await enable_unifi_ap(network_client, mac, site_id)
-        # Ensure the return value matches the expected type
         if isinstance(result, dict):
             return result
         return {}
 
-    enable_ap_tool.__name__ = "enable_unifi_ap"
-    enable_ap_tool.__doc__ = "Enable an access point by its MAC address in the UniFi Network Controller. Takes a required mac address and an optional site_id parameter (defaults to 'default')."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
 
+def _register_statistics_tools(server: FastMCP, network_client: NetworkClient) -> None:
+    """Register statistics tools."""
 
-def _create_get_statistics_tool(network_client: NetworkClient) -> None:
-    """Create the get_statistics tool."""
+    @server.tool()
+    async def unifi_get_statistics(site_id: str = "default") -> dict[str, Any]:
+        """Get site statistics from the UniFi Network Controller.
 
-    async def get_statistics_tool(site_id: str = "default") -> dict[str, Any]:
+        Args:
+            site_id: The site ID to query (defaults to 'default')
+        """
         result = await get_unifi_statistics(network_client, site_id)
-        # Ensure the return value matches the expected type
         if isinstance(result, dict):
             return result
         return {}
-
-    get_statistics_tool.__name__ = "get_unifi_statistics"
-    get_statistics_tool.__doc__ = "Get site statistics from the UniFi Network Controller. Takes an optional site_id parameter (defaults to 'default')."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
 
 
 def _register_access_tools(server: FastMCP, access_client: AccessClient) -> None:
     """Register access tools with the server."""
-    _create_get_access_points_tool(access_client)
-    _create_get_access_users_tool(access_client)
-    _create_get_access_logs_tool(access_client)
-    _create_unlock_door_tool(access_client)
-    _create_set_access_schedule_tool(access_client)
 
-
-def _create_get_access_points_tool(access_client: AccessClient) -> None:
-    """Create the get_access_points tool."""
-
-    async def get_access_points_tool() -> list[dict[str, Any]]:
+    @server.tool()
+    async def unifi_get_access_points() -> list[dict[str, Any]]:
+        """Get all access points from the UniFi Access Controller"""
         result = await get_unifi_access_points(access_client)
-        # Ensure the return value matches the expected type
         if isinstance(result, list):
             return result
         return []
 
-    get_access_points_tool.__name__ = "get_unifi_access_points"
-    get_access_points_tool.__doc__ = (
-        "Get all access points from the UniFi Access Controller"
-    )
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
-
-
-def _create_get_access_users_tool(access_client: AccessClient) -> None:
-    """Create the get_access_users tool."""
-
-    async def get_access_users_tool() -> list[dict[str, Any]]:
+    @server.tool()
+    async def unifi_get_access_users() -> list[dict[str, Any]]:
+        """Get all users from the UniFi Access Controller"""
         result = await get_unifi_access_users(access_client)
-        # Ensure the return value matches the expected type
         if isinstance(result, list):
             return result
         return []
 
-    get_access_users_tool.__name__ = "get_unifi_access_users"
-    get_access_users_tool.__doc__ = "Get all users from the UniFi Access Controller"
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
-
-
-def _create_get_access_logs_tool(access_client: AccessClient) -> None:
-    """Create the get_access_logs tool."""
-
-    async def get_access_logs_tool() -> list[dict[str, Any]]:
+    @server.tool()
+    async def unifi_get_access_logs() -> list[dict[str, Any]]:
+        """Get door access logs from the UniFi Access Controller"""
         result = await get_unifi_access_logs(access_client)
-        # Ensure the return value matches the expected type
         if isinstance(result, list):
             return result
         return []
 
-    get_access_logs_tool.__name__ = "get_unifi_access_logs"
-    get_access_logs_tool.__doc__ = (
-        "Get door access logs from the UniFi Access Controller"
-    )
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
+    @server.tool()
+    async def unifi_unlock_door(door_id: str) -> dict[str, Any]:
+        """Unlock a door via the UniFi Access Controller.
 
-
-def _create_unlock_door_tool(access_client: AccessClient) -> None:
-    """Create the unlock_door tool."""
-
-    async def unlock_door_tool(door_id: str) -> dict[str, Any]:
+        Args:
+            door_id: The ID of the door to unlock
+        """
         result = await unlock_unifi_door(access_client, door_id)
-        # Ensure the return value matches the expected type
         if isinstance(result, dict):
             return result
         return {}
 
-    unlock_door_tool.__name__ = "unlock_unifi_door"
-    unlock_door_tool.__doc__ = "Unlock a door via the UniFi Access Controller. Takes a required door_id parameter."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
+    @server.tool()
+    async def unifi_set_access_schedule(user_id: str, schedule: dict) -> dict[str, Any]:
+        """Set access schedule for a user via the UniFi Access Controller.
 
-
-def _create_set_access_schedule_tool(access_client: AccessClient) -> None:
-    """Create the set_access_schedule tool."""
-
-    async def set_access_schedule_tool(user_id: str, schedule: dict) -> dict[str, Any]:
+        Args:
+            user_id: The user ID to configure
+            schedule: The schedule configuration dictionary
+        """
         result = await set_unifi_access_schedule(access_client, user_id, schedule)
-        # Ensure the return value matches the expected type
         if isinstance(result, dict):
             return result
         return {}
-
-    set_access_schedule_tool.__name__ = "set_unifi_access_schedule"
-    set_access_schedule_tool.__doc__ = "Set access schedule for a user via the UniFi Access Controller. Takes a required user_id and schedule parameter."
-    # Skip tool registration for now since FastMCP doesn't have a 'tools' attribute
 
 
 def run_server() -> None:
     """Run the UniFi MCP server."""
-    # Load settings
-    settings = Settings()
+    settings = _load_and_validate_settings()
+    server = _create_server_with_error_handling(settings)
+    _configure_logging(settings)
+    features = _build_feature_list(settings)
+    _display_startup_message(settings, features)
+    _run_server_instance(server, settings)
 
-    # Create server
-    server = create_server(settings)
 
-    # Configure logging
+def _load_and_validate_settings() -> Settings:
+    """Load and validate settings, handling configuration errors."""
+    try:
+        settings = Settings()
+        settings.validate_credentials_at_startup()
+        return settings
+    except Exception as e:
+        # Check if this is an MCP server error (if exceptions available)
+        from unifi_mcp.config import EXCEPTIONS_AVAILABLE
+
+        if EXCEPTIONS_AVAILABLE:
+            from mcp_common.exceptions import MCPServerError
+
+            if isinstance(e, MCPServerError):
+                print(f"\n❌ Server Configuration Error: {e}", file=sys.stderr)
+                if hasattr(e, "field") and e.field:
+                    print(f"   Field: {e.field}", file=sys.stderr)
+                sys.exit(1)
+
+        # Re-raise if not an MCP error or exceptions unavailable
+        raise
+
+
+def _create_server_with_error_handling(settings: Settings) -> FastMCP:
+    """Create server with proper error handling."""
+    return create_server(settings)
+
+
+def _configure_logging(settings: Settings) -> None:
+    """Configure logging based on settings."""
     logging.basicConfig(
         level=logging.INFO if settings.server.debug else logging.WARNING,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
-    # Run the server
+
+def _build_feature_list(settings: Settings) -> list[str]:
+    """Build a list of features based on configured controllers."""
+    features = []
+
+    if settings.network_controller:
+        features.extend(
+            [
+                "🌐 Network Controller Integration",
+                "  • Site Management & Statistics",
+                "  • Device Control (AP enable/disable, restart)",
+                "  • Client & WLAN Management",
+            ]
+        )
+
+    if settings.access_controller:
+        features.extend(
+            [
+                "🔒 Access Controller Integration",
+                "  • Door Access Control & Unlock",
+                "  • User & Schedule Management",
+                "  • Access Event Logging",
+            ]
+        )
+
+    features.extend(
+        [
+            "⚡ Connection Pooling (persistent HTTP clients)",
+            "🛡️ Rate Limiting (10 req/sec, burst to 20)"
+            if RATE_LIMITING_AVAILABLE
+            else None,
+            "🔒 Credential Validation (12+ char passwords)",
+            "🎨 Modern FastMCP Architecture",
+        ]
+    )
+
+    # Remove None entries if rate limiting not available
+    return [f for f in features if f is not None]
+
+
+def _display_startup_message(settings: Settings, features: list[str]) -> None:
+    """Display startup message with ServerPanels or fallback to plain text."""
+    if SERVERPANELS_AVAILABLE:
+        from mcp_common.ui import ServerPanels
+
+        ServerPanels.startup_success(
+            server_name="UniFi Controller MCP",
+            version="1.0.0",
+            features=features,
+            endpoint=f"http://{settings.server.host}:{settings.server.port}/mcp",
+        )
+    else:
+        # Fallback to plain text
+        print("\n✅ UniFi Controller MCP Server Starting", file=sys.stderr)
+        print(
+            f"   Endpoint: http://{settings.server.host}:{settings.server.port}/mcp",
+            file=sys.stderr,
+        )
+        for feature in features:
+            print(f"   {feature}", file=sys.stderr)
+        print("", file=sys.stderr)
+
+
+def _run_server_instance(server: FastMCP, settings: Settings) -> None:
+    """Run the server instance with the provided settings."""
     server.run(
         host=settings.server.host,
         port=settings.server.port,
         reload=settings.server.reload,
     )
+
+
+# Export ASGI app for uvicorn (standardized startup pattern)
+# Create a default server instance for uvicorn
+_default_settings = Settings()
+_default_server = create_server(_default_settings)
+http_app = _default_server.http_app
 
 
 if __name__ == "__main__":

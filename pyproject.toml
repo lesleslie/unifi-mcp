@@ -8,6 +8,7 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "fastmcp>=2.12.3",
+    "mcp-common",
     "pydantic[email]>=2.11.9",
 ]
 
@@ -15,8 +16,13 @@ dependencies = [
 dev = [
     "crackerjack>=0.38.13",
     "excalidraw-mcp>=0.34.0",
-    "session-mgmt-mcp>=0.3.13",
+    "session-buddy>=0.3.13",
 ]
+
+[tool.unifi-mcp]
+http_port = 3038
+http_host = "127.0.0.1"
+enable_http_transport = true
 
 [tool.ruff]
 target-version = "py313"
@@ -47,7 +53,7 @@ fixable = [
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 timeout = 300
-addopts = "--cov=crackerjack --cov-report=term"
+addopts = "--cov=unifi_mcp --cov-report=term"
 markers = [
     "unit: marks test as a unit test",
     "benchmark: mark test as a benchmark",
@@ -59,3 +65,6 @@ markers = [
 paths = [
     "unifi_mcp",
 ]
+
+[tool.uv.sources.mcp-common]
+path = "../mcp-common"

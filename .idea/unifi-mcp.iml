@@ -6,7 +6,5 @@
     </content>
     <orderEntry type="jdk" jdkName="uv (unifi-mcp)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="opera-cloud-mcp" />
-    <orderEntry type="module" module-name="raindropio-mcp" />
   </component>
 </module>

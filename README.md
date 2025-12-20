@@ -2,7 +2,7 @@
 
 [![Code style: crackerjack](https://img.shields.io/badge/code%20style-crackerjack-000042)](https://github.com/lesleslie/crackerjack)
 [![Python: 3.13+](https://img.shields.io/badge/python-3.13%2B-green)](https://www.python.org/downloads/)
-![Coverage](https://img.shields.io/badge/coverage-26.0%25-red)
+![Coverage](https://img.shields.io/badge/coverage-26.8%25-red)
 
 A FastMCP server for managing UniFi Network and Access controllers.
 

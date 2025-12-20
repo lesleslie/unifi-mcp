@@ -4,48 +4,67 @@ import typer
 
 from unifi_mcp.config import Settings
 from unifi_mcp.server import run_server
+from unifi_mcp.utils.process_utils import ServerManager
 
-app = typer.Typer()
+app = typer.Typer(
+    help="UniFi MCP CLI for server management and configuration.",
+    invoke_without_command=True,
+)
+manager = ServerManager(project_name="unifi-mcp")
 
 
-@app.command()
-def start(
+@app.callback()
+def main(
+    ctx: typer.Context,
+    start_server: bool = typer.Option(
+        False,
+        "--start-mcp-server",
+        help="Starts the UniFi MCP server in the background.",
+    ),
+    stop_server: bool = typer.Option(
+        False, "--stop-mcp-server", help="Stops the UniFi MCP server."
+    ),
+    restart_server: bool = typer.Option(
+        False, "--restart-mcp-server", help="Restarts the UniFi MCP server."
+    ),
+    server_status: bool = typer.Option(
+        False, "--server-status", help="Checks the status of the UniFi MCP server."
+    ),
     host: str = typer.Option("127.0.0.1", help="Host to bind the server to"),
     port: int = typer.Option(8000, help="Port to bind the server to"),
-    debug: bool = typer.Option(False, help="Enable debug mode"),
-    reload: bool = typer.Option(False, help="Enable auto-reload on file changes"),
+    debug: bool = typer.Option(False, "--debug", help="Enable debug mode"),
+    reload: bool = typer.Option(
+        False, "--reload", help="Enable auto-reload on file changes"
+    ),
 ) -> None:
-    """Start the UniFi MCP server."""
-    # Update environment variables with CLI parameters
-    import os
+    """Main CLI entry point for UniFi MCP."""
+    actions = [start_server, stop_server, restart_server, server_status]
+    if sum(actions) > 1:
+        typer.echo(
+            "Error: Please use only one of --start-mcp-server, --stop-mcp-server, "
+            "--restart-mcp-server, or --server-status at a time.",
+            err=True,
+        )
+        raise typer.Exit(code=1)
 
-    os.environ["MCP_SERVER_HOST"] = host
-    os.environ["MCP_SERVER_PORT"] = str(port)
-    os.environ["MCP_DEBUG"] = str(debug).lower()
-    os.environ["MCP_RELOAD"] = str(reload).lower()
+    # If a management flag was used, execute the action and exit.
+    if sum(actions) == 1:
+        if restart_server:
+            manager.stop_server()
+            manager.start_server(host, port, debug, reload)
+        elif start_server:
+            manager.start_server(host, port, debug, reload)
+        elif stop_server:
+            manager.stop_server()
+        elif server_status:
+            manager.get_status()
+        raise typer.Exit()
 
-    # Create settings using the updated environment variables
-    Settings()
-
-    # Start the server
-    typer.echo(f"Starting UniFi MCP server on {host}:{port}")
-    if debug:
-        typer.echo("Debug mode enabled")
-    if reload:
-        typer.echo("Auto-reload enabled")
-
-    # Run the server (this will block)
-
-    # In a real implementation, we'd run the server in a thread
-    # and provide a way to manage it, but for now we'll just call run_server()
-    run_server()
-
-
-@app.command()
-def status() -> None:
-    """Check the status of the UniFi MCP server."""
-    typer.echo("UniFi MCP server status: Not implemented yet")
-    # In a real implementation, this would check if the server is running
+    # If no management flags were used and no subcommand is invoked, run the default action.
+    if ctx.invoked_subcommand is None:
+        typer.echo(f"Starting UniFi MCP server in foreground on {host}:{port}")
+        # This call blocks, running the server in the foreground.
+        run_server()
 
 
 @app.command()
@@ -92,7 +111,6 @@ def test_connection(
         typer.echo(
             f"Testing connection to Network Controller at {settings.network_controller.host}:{settings.network_controller.port}"
         )
-        # In a real implementation, this would test the actual connection
         typer.echo("Network controller connection test: Not implemented yet")
 
     elif controller_type.lower() == "access":
@@ -103,7 +121,6 @@ def test_connection(
         typer.echo(
             f"Testing connection to Access Controller at {settings.access_controller.host}:{settings.access_controller.port}"
         )
-        # In a real implementation, this would test the actual connection
         typer.echo("Access controller connection test: Not implemented yet")
 
     else:
