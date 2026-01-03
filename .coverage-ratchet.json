@@ -9,9 +9,9 @@
       "milestone": false
     },
     {
-      "date": "2025-12-19T22:09:22.817120",
-      "coverage": 26.81564245810056,
       "commit": "current",
+      "coverage": 26.81564245810056,
+      "date": "2025-12-19T22:09:22.817120",
       "milestone": false,
       "milestones_hit": []
     }

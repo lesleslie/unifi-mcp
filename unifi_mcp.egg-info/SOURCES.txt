@@ -20,4 +20,5 @@ unifi_mcp/models/access.py
 unifi_mcp/models/network.py
 unifi_mcp/tools/access_tools.py
 unifi_mcp/tools/network_tools.py
+unifi_mcp/utils/process_utils.py
 unifi_mcp/utils/retry_utils.py
