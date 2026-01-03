@@ -232,32 +232,65 @@ def _register_statistics_tools(server: FastMCP, network_client: NetworkClient) -
         return {}
 
 
+def _create_list_tool(access_client: AccessClient, fetch_func):
+    """Create a list-returning tool for UniFi Access API.
+
+    Args:
+        access_client: The AccessClient instance
+        fetch_func: Async function to fetch data
+
+    Returns:
+        An async function that returns a list of results
+    """
+
+    async def tool_wrapper(**kwargs):
+        """Wrapper that executes the fetch function and returns list results."""
+        result = await fetch_func(access_client, **kwargs)
+        if isinstance(result, list):
+            return result
+        return []
+
+    return tool_wrapper
+
+
+def _create_dict_tool(access_client: AccessClient, fetch_func):
+    """Create a dict-returning tool for UniFi Access API.
+
+    Args:
+        access_client: The AccessClient instance
+        fetch_func: Async function to fetch data
+
+    Returns:
+        An async function that returns a dict result
+    """
+
+    async def tool_wrapper(**kwargs):
+        """Wrapper that executes the fetch function and returns dict results."""
+        result = await fetch_func(access_client, **kwargs)
+        if isinstance(result, dict):
+            return result
+        return {}
+
+    return tool_wrapper
+
+
 def _register_access_tools(server: FastMCP, access_client: AccessClient) -> None:
     """Register access tools with the server."""
 
     @server.tool()
     async def unifi_get_access_points() -> list[dict[str, Any]]:
         """Get all access points from the UniFi Access Controller"""
-        result = await get_unifi_access_points(access_client)
-        if isinstance(result, list):
-            return result
-        return []
+        return await _create_list_tool(access_client, get_unifi_access_points)()
 
     @server.tool()
     async def unifi_get_access_users() -> list[dict[str, Any]]:
         """Get all users from the UniFi Access Controller"""
-        result = await get_unifi_access_users(access_client)
-        if isinstance(result, list):
-            return result
-        return []
+        return await _create_list_tool(access_client, get_unifi_access_users)()
 
     @server.tool()
     async def unifi_get_access_logs() -> list[dict[str, Any]]:
         """Get door access logs from the UniFi Access Controller"""
-        result = await get_unifi_access_logs(access_client)
-        if isinstance(result, list):
-            return result
-        return []
+        return await _create_list_tool(access_client, get_unifi_access_logs)()
 
     @server.tool()
     async def unifi_unlock_door(door_id: str) -> dict[str, Any]:
@@ -266,10 +299,7 @@ def _register_access_tools(server: FastMCP, access_client: AccessClient) -> None
         Args:
             door_id: The ID of the door to unlock
         """
-        result = await unlock_unifi_door(access_client, door_id)
-        if isinstance(result, dict):
-            return result
-        return {}
+        return await _create_dict_tool(access_client, unlock_unifi_door)(door_id=door_id)
 
     @server.tool()
     async def unifi_set_access_schedule(user_id: str, schedule: dict) -> dict[str, Any]:
@@ -279,10 +309,9 @@ def _register_access_tools(server: FastMCP, access_client: AccessClient) -> None
             user_id: The user ID to configure
             schedule: The schedule configuration dictionary
         """
-        result = await set_unifi_access_schedule(access_client, user_id, schedule)
-        if isinstance(result, dict):
-            return result
-        return {}
+        return await _create_dict_tool(
+            access_client, set_unifi_access_schedule
+        )(user_id=user_id, schedule=schedule)
 
 
 def run_server() -> None:
