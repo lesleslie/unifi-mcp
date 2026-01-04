@@ -8,7 +8,7 @@ sys.path.insert(0, "/Users/les/Projects/oneiric")
 from unifi_mcp.__main__ import UniFiConfig, UniFiMCPServer
 
 
-def test_config():
+def test_config() -> None:
     """Test configuration loading."""
     print("Testing UniFi configuration...")
     config = UniFiConfig()
@@ -17,7 +17,7 @@ def test_config():
     print(f"HTTP Host: {config.http_host}")
     print("✅ Configuration test passed")
 
-def test_server_creation():
+def test_server_creation() -> None:
     """Test server creation."""
     print("\nTesting UniFi server creation...")
     config = UniFiConfig()
@@ -28,11 +28,11 @@ def test_server_creation():
     print(f"Server has get_app method: {hasattr(server, 'get_app')}")
     print("✅ Server creation test passed")
 
-def test_cli_factory():
+def test_cli_factory() -> None:
     """Test CLI factory creation."""
     print("\nTesting UniFi CLI factory...")
     from oneiric.core.cli import MCPServerCLIFactory
-    
+
     UniFiConfig()
     cli_factory = MCPServerCLIFactory(
         server_class=UniFiMCPServer,
@@ -48,14 +48,14 @@ def test_cli_factory():
 
 if __name__ == "__main__":
     print("🚀 Starting UniFi MCP CLI tests...")
-    
+
     try:
         test_config()
         test_server_creation()
         test_cli_factory()
-        
+
         print("\n🎉 All UniFi tests passed! CLI integration is working.")
-        
+
     except Exception as e:
         print(f"\n❌ Test failed: {e}")
         import traceback

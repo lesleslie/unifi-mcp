@@ -1,7 +1,7 @@
 """Helper to create tool decorators for fastmcp versions that don't have them built-in."""
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, cast
 
 from fastmcp.tools import Tool
 
@@ -15,6 +15,7 @@ def tool(func: Callable[..., Any]) -> Callable[..., Any]:
 
     # Store the tool instance as an attribute on the function
     # so it can be recognized by the server
-    func._fastmcp_tool = tool_instance
+    func = cast(Callable[..., Any], func)
+    setattr(func, '_fastmcp_tool', tool_instance)
 
     return func

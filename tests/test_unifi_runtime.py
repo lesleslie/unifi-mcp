@@ -8,7 +8,7 @@ import pytest
 
 
 # Test 1: Verify Oneiric modules can be imported
-def test_oneiric_imports():
+def test_oneiric_imports() -> None:
     """Test that Oneiric runtime modules are accessible."""
     # Core CLI imports
     from oneiric.core.cli import MCPServerCLIFactory
@@ -34,7 +34,7 @@ def test_oneiric_imports():
 
 
 # Test 2: Verify UniFiConfig configuration class
-def test_unifi_config():
+def test_unifi_config() -> None:
     """Test that UniFiConfig can be instantiated."""
     from unifi_mcp.__main__ import UniFiConfig
 
@@ -44,12 +44,12 @@ def test_unifi_config():
     # Verify default values
     assert config.http_port == 3038
     assert config.http_host == "127.0.0.1"
-    assert config.enable_http_transport is True
+    assert config.enable_http_transport
     assert config.cache_dir is None or config.cache_dir == ".oneiric_cache"
 
 
 # Test 3: Verify UniFiMCPServer can be created
-def test_unifi_server_creation():
+def test_unifi_server_creation() -> None:
     """Test that UniFiMCPServer can be instantiated."""
     from unifi_mcp.__main__ import UniFiConfig, UniFiMCPServer
 
@@ -70,7 +70,7 @@ def test_unifi_server_creation():
 
 # Test 4: Verify health check can be executed
 @pytest.mark.asyncio
-async def test_unifi_health_check():
+async def test_unifi_health_check() -> None:
     """Test that health check method works."""
     from unifi_mcp.__main__ import UniFiConfig, UniFiMCPServer
 
@@ -89,7 +89,7 @@ async def test_unifi_health_check():
 
 
 # Test 5: Verify cache directory can be configured
-def test_cache_directory_configuration():
+def test_cache_directory_configuration() -> None:
     """Test that custom cache directory can be set."""
     from unifi_mcp.__main__ import UniFiConfig
 
@@ -101,7 +101,7 @@ def test_cache_directory_configuration():
 
 
 # Test 6: Verify CLI factory can be created
-def test_cli_factory_creation():
+def test_cli_factory_creation() -> None:
     """Test that MCPServerCLIFactory can be created for UniFi."""
     from oneiric.core.cli import MCPServerCLIFactory
 
@@ -126,7 +126,7 @@ def test_cli_factory_creation():
 
 
 # Test 7: Verify environment prefix configuration
-def test_environment_prefix():
+def test_environment_prefix() -> None:
     """Test that environment variable prefix is correctly configured."""
     from unifi_mcp.__main__ import UniFiConfig
 
@@ -136,7 +136,7 @@ def test_environment_prefix():
 
 
 # Test 8: Verify settings conversion
-def test_settings_conversion():
+def test_settings_conversion() -> None:
     """Test that Oneiric config can be converted to UniFi Settings."""
     from unifi_mcp.__main__ import UniFiConfig, UniFiMCPServer
 

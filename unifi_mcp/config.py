@@ -3,8 +3,7 @@
 import importlib.util
 import sys
 
-from pydantic import ConfigDict
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Import security utilities for password validation (Phase 3 Security Hardening)
 try:
@@ -74,7 +73,7 @@ class Settings(BaseSettings):
     # Server settings
     server: ServerSettings = ServerSettings()
 
-    model_config = ConfigDict(
+    model_config = SettingsConfigDict(
         env_file=".env",
         env_nested_delimiter="__",
     )
@@ -88,7 +87,7 @@ class Settings(BaseSettings):
         Raises:
             SystemExit: If credentials are missing or weak passwords detected
         """
-        controllers_to_validate = []
+        controllers_to_validate: list[tuple[str, UniFiSettings]] = []
 
         if self.network_controller:
             controllers_to_validate.append(
@@ -133,7 +132,7 @@ class Settings(BaseSettings):
         Returns:
             Masked password like "...xyz1" for safe display in logs
         """
-        controller = None
+        controller: UniFiSettings | None = None
         if controller_type == "network" and self.network_controller:
             controller = self.network_controller
         elif controller_type == "access" and self.access_controller:

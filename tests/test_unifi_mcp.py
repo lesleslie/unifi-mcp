@@ -7,7 +7,7 @@ from unifi_mcp.clients.access_client import AccessClient
 from unifi_mcp.clients.network_client import NetworkClient
 
 
-async def test_network_client():
+async def test_network_client() -> None:
     """Test the Network Controller client."""
     print("Testing Network Controller client...")
 
@@ -33,20 +33,20 @@ async def test_network_client():
 
             # Test getting sites
             if authenticated:
-                sites = await client.get_sites()
+                sites = await client.get_sites()  # type: ignore
                 print(f"Found {len(sites)} sites")
 
                 # Test getting devices from the first site if available
                 if sites:
                     site_id = sites[0].get("name", "default")
-                    devices = await client.get_devices(site_id)
+                    devices = await client.get_devices(site_id)  # type: ignore
                     print(f"Found {len(devices)} devices in site '{site_id}'")
 
         except Exception as e:
             print(f"Error testing Network Controller client: {e}")
 
 
-async def test_access_client():
+async def test_access_client() -> None:
     """Test the Access Controller client."""
     print("Testing Access Controller client...")
 
@@ -72,14 +72,14 @@ async def test_access_client():
 
             # Test getting access points
             if authenticated:
-                access_points = await client.get_access_points()
+                access_points = await client.get_access_points()  # type: ignore
                 print(f"Found {len(access_points)} access points")
 
         except Exception as e:
             print(f"Error testing Access Controller client: {e}")
 
 
-async def main():
+async def main() -> None:
     """Run tests."""
     print("Starting UniFi MCP server tests...")
     await test_network_client()

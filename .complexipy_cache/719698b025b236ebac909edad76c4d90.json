@@ -1,0 +1,505 @@
+{
+  "functions": [
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::__init__",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::_convert_to_unifi_settings",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::_get_timestamp",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::cache_manager",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::get_app",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::health_monitor",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::shutdown",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::snapshot_manager",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::startup",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "__main__.py",
+      "function_name": "main",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "__main__.py",
+      "function_name": "UniFiMCPServer::health_check",
+      "path": "unifi_mcp/__main__.py"
+    },
+    {
+      "complexity": 4,
+      "file_name": "cli.py",
+      "function_name": "config",
+      "path": "unifi_mcp/cli.py"
+    },
+    {
+      "complexity": 7,
+      "file_name": "cli.py",
+      "function_name": "test_connection",
+      "path": "unifi_mcp/cli.py"
+    },
+    {
+      "complexity": 8,
+      "file_name": "cli.py",
+      "function_name": "main",
+      "path": "unifi_mcp/cli.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "access_client.py",
+      "function_name": "AccessClient::__init__",
+      "path": "unifi_mcp/clients/access_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "access_client.py",
+      "function_name": "AccessClient::set_access_schedule",
+      "path": "unifi_mcp/clients/access_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "access_client.py",
+      "function_name": "AccessClient::unlock_door",
+      "path": "unifi_mcp/clients/access_client.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "access_client.py",
+      "function_name": "AccessClient::get_access_points",
+      "path": "unifi_mcp/clients/access_client.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "access_client.py",
+      "function_name": "AccessClient::get_door_access_logs",
+      "path": "unifi_mcp/clients/access_client.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "access_client.py",
+      "function_name": "AccessClient::get_users",
+      "path": "unifi_mcp/clients/access_client.py"
+    },
+    {
+      "complexity": 8,
+      "file_name": "access_client.py",
+      "function_name": "AccessClient::authenticate",
+      "path": "unifi_mcp/clients/access_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "base_client.py",
+      "function_name": "BaseUniFiClient::__aenter__",
+      "path": "unifi_mcp/clients/base_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "base_client.py",
+      "function_name": "BaseUniFiClient::__aexit__",
+      "path": "unifi_mcp/clients/base_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "base_client.py",
+      "function_name": "BaseUniFiClient::__init__",
+      "path": "unifi_mcp/clients/base_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "base_client.py",
+      "function_name": "BaseUniFiClient::authenticate",
+      "path": "unifi_mcp/clients/base_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "base_client.py",
+      "function_name": "BaseUniFiClient::close",
+      "path": "unifi_mcp/clients/base_client.py"
+    },
+    {
+      "complexity": 5,
+      "file_name": "base_client.py",
+      "function_name": "BaseUniFiClient::_make_request",
+      "path": "unifi_mcp/clients/base_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::__init__",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::disable_ap",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::enable_ap",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::get_statistics",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::restart_device",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::get_clients",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::get_devices",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::get_sites",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::get_wlans",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 8,
+      "file_name": "network_client.py",
+      "function_name": "NetworkClient::authenticate",
+      "path": "unifi_mcp/clients/network_client.py"
+    },
+    {
+      "complexity": 8,
+      "file_name": "config.py",
+      "function_name": "Settings::validate_credentials_at_startup",
+      "path": "unifi_mcp/config.py"
+    },
+    {
+      "complexity": 10,
+      "file_name": "config.py",
+      "function_name": "Settings::get_masked_password",
+      "path": "unifi_mcp/config.py"
+    },
+    {
+      "complexity": 15,
+      "file_name": "config.py",
+      "function_name": "_validate_unifi_credentials",
+      "path": "unifi_mcp/config.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "main.py",
+      "function_name": "main",
+      "path": "unifi_mcp/main.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "server.py",
+      "function_name": "_configure_logging",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "server.py",
+      "function_name": "_create_server_with_error_handling",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "server.py",
+      "function_name": "_register_access_tools",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "server.py",
+      "function_name": "_register_network_tools",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "server.py",
+      "function_name": "_run_server_instance",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "server.py",
+      "function_name": "run_server",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "server.py",
+      "function_name": "_create_access_client",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "server.py",
+      "function_name": "_create_network_client",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "server.py",
+      "function_name": "_create_dict_tool",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "server.py",
+      "function_name": "_create_list_tool",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "server.py",
+      "function_name": "_register_client_tools",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "server.py",
+      "function_name": "_register_device_tools",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "server.py",
+      "function_name": "_register_site_tools",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "server.py",
+      "function_name": "_register_statistics_tools",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "server.py",
+      "function_name": "_register_wlan_tools",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 3,
+      "file_name": "server.py",
+      "function_name": "_build_feature_list",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 3,
+      "file_name": "server.py",
+      "function_name": "create_server",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 4,
+      "file_name": "server.py",
+      "function_name": "_display_startup_message",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 6,
+      "file_name": "server.py",
+      "function_name": "_register_device_control_tools",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 11,
+      "file_name": "server.py",
+      "function_name": "_load_and_validate_settings",
+      "path": "unifi_mcp/server.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "access_tools.py",
+      "function_name": "get_unifi_access_logs",
+      "path": "unifi_mcp/tools/access_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "access_tools.py",
+      "function_name": "get_unifi_access_points",
+      "path": "unifi_mcp/tools/access_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "access_tools.py",
+      "function_name": "get_unifi_access_users",
+      "path": "unifi_mcp/tools/access_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "access_tools.py",
+      "function_name": "set_unifi_access_schedule",
+      "path": "unifi_mcp/tools/access_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "access_tools.py",
+      "function_name": "unlock_unifi_door",
+      "path": "unifi_mcp/tools/access_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_tools.py",
+      "function_name": "disable_unifi_ap",
+      "path": "unifi_mcp/tools/network_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_tools.py",
+      "function_name": "enable_unifi_ap",
+      "path": "unifi_mcp/tools/network_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_tools.py",
+      "function_name": "get_unifi_clients",
+      "path": "unifi_mcp/tools/network_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_tools.py",
+      "function_name": "get_unifi_devices",
+      "path": "unifi_mcp/tools/network_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_tools.py",
+      "function_name": "get_unifi_sites",
+      "path": "unifi_mcp/tools/network_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_tools.py",
+      "function_name": "get_unifi_statistics",
+      "path": "unifi_mcp/tools/network_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_tools.py",
+      "function_name": "get_unifi_wlans",
+      "path": "unifi_mcp/tools/network_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "network_tools.py",
+      "function_name": "restart_unifi_device",
+      "path": "unifi_mcp/tools/network_tools.py"
+    },
+    {
+      "complexity": 0,
+      "file_name": "process_utils.py",
+      "function_name": "ServerManager::__init__",
+      "path": "unifi_mcp/utils/process_utils.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "process_utils.py",
+      "function_name": "ServerManager::get_pid",
+      "path": "unifi_mcp/utils/process_utils.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "process_utils.py",
+      "function_name": "ServerManager::get_status",
+      "path": "unifi_mcp/utils/process_utils.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "process_utils.py",
+      "function_name": "ServerManager::is_running",
+      "path": "unifi_mcp/utils/process_utils.py"
+    },
+    {
+      "complexity": 2,
+      "file_name": "process_utils.py",
+      "function_name": "ServerManager::start_server",
+      "path": "unifi_mcp/utils/process_utils.py"
+    },
+    {
+      "complexity": 5,
+      "file_name": "process_utils.py",
+      "function_name": "ServerManager::stop_server",
+      "path": "unifi_mcp/utils/process_utils.py"
+    },
+    {
+      "complexity": 1,
+      "file_name": "retry_utils.py",
+      "function_name": "_calculate_delay",
+      "path": "unifi_mcp/utils/retry_utils.py"
+    },
+    {
+      "complexity": 10,
+      "file_name": "retry_utils.py",
+      "function_name": "retry_with_backoff",
+      "path": "unifi_mcp/utils/retry_utils.py"
+    },
+    {
+      "complexity": 14,
+      "file_name": "retry_utils.py",
+      "function_name": "retry_async",
+      "path": "unifi_mcp/utils/retry_utils.py"
+    }
+  ],
+  "targets": [
+    "/Users/les/Projects/unifi-mcp/unifi_mcp"
+  ]
+}

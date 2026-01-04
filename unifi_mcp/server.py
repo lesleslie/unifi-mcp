@@ -232,7 +232,12 @@ def _register_statistics_tools(server: FastMCP, network_client: NetworkClient) -
         return {}
 
 
-def _create_list_tool(access_client: AccessClient, fetch_func):
+from collections.abc import Callable
+
+
+def _create_list_tool(
+    access_client: AccessClient, fetch_func: Callable[..., Any]
+) -> Callable[..., Any]:
     """Create a list-returning tool for UniFi Access API.
 
     Args:
@@ -243,7 +248,7 @@ def _create_list_tool(access_client: AccessClient, fetch_func):
         An async function that returns a list of results
     """
 
-    async def tool_wrapper(**kwargs):
+    async def tool_wrapper(**kwargs: Any) -> list[dict[str, Any]]:
         """Wrapper that executes the fetch function and returns list results."""
         result = await fetch_func(access_client, **kwargs)
         if isinstance(result, list):
@@ -253,7 +258,9 @@ def _create_list_tool(access_client: AccessClient, fetch_func):
     return tool_wrapper
 
 
-def _create_dict_tool(access_client: AccessClient, fetch_func):
+def _create_dict_tool(
+    access_client: AccessClient, fetch_func: Callable[..., Any]
+) -> Callable[..., Any]:
     """Create a dict-returning tool for UniFi Access API.
 
     Args:
@@ -264,7 +271,7 @@ def _create_dict_tool(access_client: AccessClient, fetch_func):
         An async function that returns a dict result
     """
 
-    async def tool_wrapper(**kwargs):
+    async def tool_wrapper(**kwargs: Any) -> dict[str, Any]:
         """Wrapper that executes the fetch function and returns dict results."""
         result = await fetch_func(access_client, **kwargs)
         if isinstance(result, dict):
@@ -280,17 +287,20 @@ def _register_access_tools(server: FastMCP, access_client: AccessClient) -> None
     @server.tool()
     async def unifi_get_access_points() -> list[dict[str, Any]]:
         """Get all access points from the UniFi Access Controller"""
-        return await _create_list_tool(access_client, get_unifi_access_points)()
+        result = await get_unifi_access_points(access_client)
+        return result
 
     @server.tool()
     async def unifi_get_access_users() -> list[dict[str, Any]]:
         """Get all users from the UniFi Access Controller"""
-        return await _create_list_tool(access_client, get_unifi_access_users)()
+        result = await get_unifi_access_users(access_client)
+        return result
 
     @server.tool()
     async def unifi_get_access_logs() -> list[dict[str, Any]]:
         """Get door access logs from the UniFi Access Controller"""
-        return await _create_list_tool(access_client, get_unifi_access_logs)()
+        result = await get_unifi_access_logs(access_client)
+        return result
 
     @server.tool()
     async def unifi_unlock_door(door_id: str) -> dict[str, Any]:
@@ -299,19 +309,21 @@ def _register_access_tools(server: FastMCP, access_client: AccessClient) -> None
         Args:
             door_id: The ID of the door to unlock
         """
-        return await _create_dict_tool(access_client, unlock_unifi_door)(door_id=door_id)
+        result = await unlock_unifi_door(access_client, door_id)
+        return result
 
     @server.tool()
-    async def unifi_set_access_schedule(user_id: str, schedule: dict) -> dict[str, Any]:
+    async def unifi_set_access_schedule(
+        user_id: str, schedule: dict[str, Any]
+    ) -> dict[str, Any]:
         """Set access schedule for a user via the UniFi Access Controller.
 
         Args:
             user_id: The user ID to configure
             schedule: The schedule configuration dictionary
         """
-        return await _create_dict_tool(
-            access_client, set_unifi_access_schedule
-        )(user_id=user_id, schedule=schedule)
+        result = await set_unifi_access_schedule(access_client, user_id, schedule)
+        return result
 
 
 def run_server() -> None:
@@ -387,16 +399,16 @@ def _build_feature_list(settings: Settings) -> list[str]:
     features.extend(
         [
             "⚡ Connection Pooling (persistent HTTP clients)",
-            "🛡️ Rate Limiting (10 req/sec, burst to 20)"
-            if RATE_LIMITING_AVAILABLE
-            else None,
             "🔒 Credential Validation (12+ char passwords)",
             "🎨 Modern FastMCP Architecture",
         ]
     )
 
-    # Remove None entries if rate limiting not available
-    return [f for f in features if f is not None]
+    # Add rate limiting feature if available
+    if RATE_LIMITING_AVAILABLE:
+        features.append("🛡️ Rate Limiting (10 req/sec, burst to 20)")
+
+    return features
 
 
 def _display_startup_message(settings: Settings, features: list[str]) -> None:

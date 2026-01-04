@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """UniFi MCP Server - Oneiric CLI Entry Point."""
 
+from datetime import UTC
+from typing import Any
+
 from mcp_common.cli import MCPServerCLIFactory
-from mcp_common.server import BaseOneiricServerMixin, create_runtime_components
+from mcp_common.server import BaseOneiricServerMixin
+from mcp_common.server.runtime import create_runtime_components
 from oneiric.core.config import OneiricMCPConfig
 from oneiric.runtime.mcp_health import HealthStatus
 
@@ -35,8 +39,7 @@ class UniFiMCPServer(BaseOneiricServerMixin):
 
         # Initialize runtime components using mcp-common helper
         self.runtime = create_runtime_components(
-            server_name="unifi-mcp",
-            cache_dir=config.cache_dir or ".oneiric_cache"
+            server_name="unifi-mcp", cache_dir=config.cache_dir or ".oneiric_cache"
         )
 
     def _convert_to_unifi_settings(self, config: UniFiConfig) -> Settings:
@@ -50,6 +53,27 @@ class UniFiMCPServer(BaseOneiricServerMixin):
         settings.server.debug = config.debug
 
         return settings
+
+    @property
+    def health_monitor(self) -> Any:
+        """Convenience property to access runtime health monitor."""
+        return self.runtime.health_monitor
+
+    @property
+    def cache_manager(self) -> Any:
+        """Convenience property to access runtime cache manager."""
+        return self.runtime.cache_manager
+
+    @property
+    def snapshot_manager(self) -> Any:
+        """Convenience property to access runtime snapshot manager."""
+        return self.runtime.snapshot_manager
+
+    def _get_timestamp(self) -> str:
+        """Get current timestamp for snapshots."""
+        from datetime import datetime
+
+        return datetime.now(tz=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     async def startup(self) -> None:
         """Server startup lifecycle hook."""
@@ -88,7 +112,7 @@ class UniFiMCPServer(BaseOneiricServerMixin):
 
         print("👋 UniFi MCP Server shutdown complete")
 
-    async def health_check(self):
+    async def health_check(self) -> Any:
         """Perform health check."""
         # Build base health components using mixin helper
         base_components = await self._build_health_components()
@@ -119,12 +143,12 @@ class UniFiMCPServer(BaseOneiricServerMixin):
         # Create health response
         return self.runtime.health_monitor.create_health_response(base_components)
 
-    def get_app(self):
+    def get_app(self) -> Any:
         """Get the ASGI application."""
         return self.server.http_app
 
 
-def main():
+def main() -> None:
     """Main entry point for UniFi MCP Server."""
 
     # Create CLI factory using mcp-common's enhanced factory
@@ -132,12 +156,11 @@ def main():
         server_class=UniFiMCPServer,
         config_class=UniFiConfig,
         name="unifi-mcp",
-        description="UniFi MCP Server - UniFi Controller management",
+        _description="UniFi MCP Server - UniFi Controller management",
     )
 
     # Create and run CLI
-    app = cli_factory.create_app()
-    app()
+    cli_factory.create_app()()
 
 
 if __name__ == "__main__":
