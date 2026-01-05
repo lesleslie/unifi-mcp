@@ -8,7 +8,7 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "fastmcp>=2.12.3",
-    "mcp-common>=0.4.4",
+    "mcp-common>=0.4.8",
     "oneiric>=0.3.6",
     "pydantic[email]>=2.11.9",
 ]
@@ -66,6 +66,3 @@ markers = [
 paths = [
     "unifi_mcp",
 ]
-
-[tool.uv.sources.mcp-common]
-path = "../mcp-common"

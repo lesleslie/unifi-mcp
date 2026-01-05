@@ -1,7 +1,17 @@
 LICENSE
 README.md
 pyproject.toml
+tests/test_access_client.py
+tests/test_access_tools.py
+tests/test_base_client.py
+tests/test_config.py
+tests/test_main_module.py
+tests/test_main_py.py
+tests/test_network_client.py
+tests/test_network_tools.py
+tests/test_server.py
 tests/test_unifi_mcp.py
+tests/test_unifi_runtime.py
 unifi_mcp/__init__.py
 unifi_mcp/__main__.py
 unifi_mcp/cli.py
