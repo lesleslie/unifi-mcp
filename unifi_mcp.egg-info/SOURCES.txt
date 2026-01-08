@@ -4,6 +4,7 @@ pyproject.toml
 tests/test_access_client.py
 tests/test_access_tools.py
 tests/test_base_client.py
+tests/test_cli.py
 tests/test_config.py
 tests/test_main_module.py
 tests/test_main_py.py
