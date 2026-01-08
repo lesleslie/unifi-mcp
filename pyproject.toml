@@ -1,6 +1,6 @@
 [project]
 name = "unifi-mcp"
-version = "0.2.1"
+version = "0.2.2"
 description = "Unofficial MCP server for the UniFi Site Manager, Access, and Network APIs"
 authors = [
     { name = "Les Leslie", email = "les@wedgwoodwebworks.com" },
