@@ -83,8 +83,8 @@ async def test_unifi_health_check() -> None:
 
     # Verify response structure
     assert health_response is not None
-    assert hasattr(health_response, 'status')
-    assert hasattr(health_response, 'components')
+    assert hasattr(health_response, "status")
+    assert hasattr(health_response, "components")
     assert len(health_response.components) > 0
 
 
@@ -114,7 +114,7 @@ def test_cli_factory_creation() -> None:
         name="unifi-mcp",
         use_subcommands=True,
         legacy_flags=False,
-        description="UniFi MCP Server - UniFi Controller management"
+        description="UniFi MCP Server - UniFi Controller management",
     )
 
     # Verify factory configuration
@@ -130,9 +130,9 @@ def test_environment_prefix() -> None:
     """Test that environment variable prefix is correctly configured."""
     from unifi_mcp.__main__ import UniFiConfig
 
-    # Check Config class attributes
-    assert hasattr(UniFiConfig.Config, 'env_prefix')
-    assert UniFiConfig.Config.env_prefix == "UNIFI_MCP_"
+    # Check model_config (Pydantic v2)
+    assert "env_prefix" in UniFiConfig.model_config
+    assert UniFiConfig.model_config["env_prefix"] == "UNIFI_MCP_"
 
 
 # Test 8: Verify settings conversion

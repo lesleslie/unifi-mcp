@@ -1,0 +1,32 @@
+# Gitleaks configuration for UniFi MCP
+[extend]
+# Use default rules
+useDefault = true
+
+# Exclude test files from secret scanning
+# Test files contain example passwords for testing only
+# Note: Path patterns in gitleaks are regex patterns matched against file paths
+
+[[path]]
+path = "tests/.*"
+description = "exclude all files in tests directory"
+
+[[path]]
+path = ".*\\.test\\.py"
+description = "exclude test files with .test.py pattern"
+
+[[path]]
+path = "tests/test_config\\.py"
+description = "test config file with test passwords"
+
+[[path]]
+path = "tests/test_base_client\\.py"
+description = "test base client file with test passwords"
+
+[[path]]
+path = "tests/test_network_client\\.py"
+description = "test network client file with test passwords"
+
+# Report configuration
+[report]
+output = "stdout" # Explicitly set output

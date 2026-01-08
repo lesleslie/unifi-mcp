@@ -1,27 +1,27 @@
 """Tests for the server module."""
 
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import Mock, patch
+
 import pytest
 
-from unifi_mcp.config import Settings, NetworkSettings, AccessSettings
-from unifi_mcp.server import (
-    create_server,
-    _create_network_client,
-    _create_access_client,
-    _register_network_tools,
-    _register_access_tools,
-    _create_list_tool,
-    _create_dict_tool,
-    _load_and_validate_settings,
-    _configure_logging,
-    _build_feature_list,
-    _display_startup_message,
-    _run_server_instance,
-    run_server,
-    _create_server_with_error_handling
-)
-from unifi_mcp.clients.network_client import NetworkClient
 from unifi_mcp.clients.access_client import AccessClient
+from unifi_mcp.clients.network_client import NetworkClient
+from unifi_mcp.config import AccessSettings, NetworkSettings, Settings
+from unifi_mcp.server import (
+    _build_feature_list,
+    _configure_logging,
+    _create_access_client,
+    _create_dict_tool,
+    _create_list_tool,
+    _create_network_client,
+    _create_server_with_error_handling,
+    _display_startup_message,
+    _load_and_validate_settings,
+    _register_access_tools,
+    _register_network_tools,
+    _run_server_instance,
+    create_server,
+)
 
 
 class TestCreateServer:
@@ -31,10 +31,10 @@ class TestCreateServer:
         """Test creating a server with default settings."""
         settings = Settings()
         server = create_server(settings)
-        
+
         # Verify server is created
         assert server is not None
-        assert hasattr(server, 'add_middleware') or hasattr(server, 'http_app')
+        assert hasattr(server, "add_middleware") or hasattr(server, "http_app")
 
     def test_create_server_with_network_controller(self):
         """Test creating a server with network controller configured."""
@@ -44,7 +44,7 @@ class TestCreateServer:
             password="password12345678",  # Long enough to pass validation
         )
         settings = Settings(network_controller=network_controller)
-        
+
         server = create_server(settings)
         assert server is not None
 
@@ -56,16 +56,16 @@ class TestCreateServer:
             password="password12345678",  # Long enough to pass validation
         )
         settings = Settings(access_controller=access_controller)
-        
+
         server = create_server(settings)
         assert server is not None
 
     def test_create_server_with_rate_limiting(self):
         """Test creating a server with rate limiting middleware."""
         settings = Settings()
-        
+
         # Mock the rate limiting availability
-        with patch('unifi_mcp.server.RATE_LIMITING_AVAILABLE', True):
+        with patch("unifi_mcp.server.RATE_LIMITING_AVAILABLE", True):
             server = create_server(settings)
             assert server is not None
 
@@ -82,7 +82,7 @@ class TestCreateNetworkClient:
             password="password123",
         )
         settings = Settings(network_controller=network_controller)
-        
+
         client = _create_network_client(settings)
         assert isinstance(client, NetworkClient)
         assert client.host == "unifi.example.com"
@@ -92,7 +92,7 @@ class TestCreateNetworkClient:
     def test_create_network_client_no_settings(self):
         """Test creating a network client when no settings are provided."""
         settings = Settings()
-        
+
         client = _create_network_client(settings)
         assert client is None
 
@@ -109,7 +109,7 @@ class TestCreateAccessClient:
             password="password123",
         )
         settings = Settings(access_controller=access_controller)
-        
+
         client = _create_access_client(settings)
         assert isinstance(client, AccessClient)
         assert client.host == "access.example.com"
@@ -119,7 +119,7 @@ class TestCreateAccessClient:
     def test_create_access_client_no_settings(self):
         """Test creating an access client when no settings are provided."""
         settings = Settings()
-        
+
         client = _create_access_client(settings)
         assert client is None
 
@@ -130,11 +130,12 @@ class TestRegisterNetworkTools:
     def test_register_network_tools(self):
         """Test registering network tools."""
         from fastmcp import FastMCP
+
         server = FastMCP(name="Test Server")
-        
+
         # Create a mock network client
         network_client = Mock(spec=NetworkClient)
-        
+
         # This should not raise an exception
         _register_network_tools(server, network_client)
 
@@ -145,11 +146,12 @@ class TestRegisterAccessTools:
     def test_register_access_tools(self):
         """Test registering access tools."""
         from fastmcp import FastMCP
+
         server = FastMCP(name="Test Server")
-        
+
         # Create a mock access client
         access_client = Mock(spec=AccessClient)
-        
+
         # This should not raise an exception
         _register_access_tools(server, access_client)
 
@@ -160,13 +162,13 @@ class TestCreateListTool:
     async def test_create_list_tool(self):
         """Test creating a list tool."""
         access_client = Mock(spec=AccessClient)
-        
+
         # Create a mock async function that returns a list
         async def mock_fetch_func(client, **kwargs):
             return [{"id": 1, "name": "test"}]
-        
+
         tool_func = _create_list_tool(access_client, mock_fetch_func)
-        
+
         # Call the tool function
         result = await tool_func()
         assert isinstance(result, list)
@@ -176,13 +178,13 @@ class TestCreateListTool:
     async def test_create_list_tool_returns_non_list(self):
         """Test creating a list tool when the function returns non-list."""
         access_client = Mock(spec=AccessClient)
-        
+
         # Create a mock async function that returns a non-list
         async def mock_fetch_func(client, **kwargs):
             return "not a list"
-        
+
         tool_func = _create_list_tool(access_client, mock_fetch_func)
-        
+
         # Call the tool function - should return empty list
         result = await tool_func()
         assert isinstance(result, list)
@@ -195,13 +197,13 @@ class TestCreateDictTool:
     async def test_create_dict_tool(self):
         """Test creating a dict tool."""
         access_client = Mock(spec=AccessClient)
-        
+
         # Create a mock async function that returns a dict
         async def mock_fetch_func(client, **kwargs):
             return {"status": "success", "data": "test"}
-        
+
         tool_func = _create_dict_tool(access_client, mock_fetch_func)
-        
+
         # Call the tool function
         result = await tool_func()
         assert isinstance(result, dict)
@@ -210,13 +212,13 @@ class TestCreateDictTool:
     async def test_create_dict_tool_returns_non_dict(self):
         """Test creating a dict tool when the function returns non-dict."""
         access_client = Mock(spec=AccessClient)
-        
+
         # Create a mock async function that returns a non-dict
         async def mock_fetch_func(client, **kwargs):
             return ["not", "a", "dict"]
-        
+
         tool_func = _create_dict_tool(access_client, mock_fetch_func)
-        
+
         # Call the tool function - should return empty dict
         result = await tool_func()
         assert isinstance(result, dict)
@@ -229,13 +231,13 @@ class TestLoadAndValidateSettings:
     def test_load_and_validate_settings_success(self):
         """Test loading and validating settings successfully."""
         # Mock the Settings class
-        with patch('unifi_mcp.server.Settings') as mock_settings_class:
+        with patch("unifi_mcp.server.Settings") as mock_settings_class:
             mock_settings_instance = Mock()
             mock_settings_instance.validate_credentials_at_startup = Mock()
             mock_settings_class.return_value = mock_settings_instance
-            
+
             settings = _load_and_validate_settings()
-            
+
             # Verify the settings were loaded and validated
             mock_settings_class.assert_called_once()
             mock_settings_instance.validate_credentials_at_startup.assert_called_once()
@@ -244,9 +246,9 @@ class TestLoadAndValidateSettings:
     def test_load_and_validate_settings_with_exception(self):
         """Test loading settings when an exception occurs."""
         # Mock the Settings class to raise an exception
-        with patch('unifi_mcp.server.Settings') as mock_settings_class:
+        with patch("unifi_mcp.server.Settings") as mock_settings_class:
             mock_settings_class.side_effect = Exception("Test error")
-            
+
             # This should raise the exception
             with pytest.raises(Exception, match="Test error"):
                 _load_and_validate_settings()
@@ -259,29 +261,29 @@ class TestConfigureLogging:
         """Test configuring logging with debug enabled."""
         settings = Settings()
         settings.server.debug = True
-        
+
         # Mock the logging.basicConfig function
-        with patch('unifi_mcp.server.logging.basicConfig') as mock_basic_config:
+        with patch("unifi_mcp.server.logging.basicConfig") as mock_basic_config:
             _configure_logging(settings)
-            
+
             # Verify logging was configured with the correct level
             mock_basic_config.assert_called_once()
             call_kwargs = mock_basic_config.call_args[1]
-            assert call_kwargs['level'] == 20  # INFO level
+            assert call_kwargs["level"] == 20  # INFO level
 
     def test_configure_logging_no_debug(self):
         """Test configuring logging with debug disabled."""
         settings = Settings()
         settings.server.debug = False
-        
+
         # Mock the logging.basicConfig function
-        with patch('unifi_mcp.server.logging.basicConfig') as mock_basic_config:
+        with patch("unifi_mcp.server.logging.basicConfig") as mock_basic_config:
             _configure_logging(settings)
-            
+
             # Verify logging was configured with the correct level
             mock_basic_config.assert_called_once()
             call_kwargs = mock_basic_config.call_args[1]
-            assert call_kwargs['level'] == 30  # WARNING level
+            assert call_kwargs["level"] == 30  # WARNING level
 
 
 class TestBuildFeatureList:
@@ -290,9 +292,9 @@ class TestBuildFeatureList:
     def test_build_feature_list_no_controllers(self):
         """Test building feature list with no controllers."""
         settings = Settings()
-        
+
         features = _build_feature_list(settings)
-        
+
         # Should have basic features but no controller-specific ones
         assert len(features) >= 3  # Basic features should be present
         assert any("Connection Pooling" in feature for feature in features)
@@ -306,9 +308,9 @@ class TestBuildFeatureList:
             password="password12345678",
         )
         settings = Settings(network_controller=network_controller)
-        
+
         features = _build_feature_list(settings)
-        
+
         # Should have network controller features
         assert any("Network Controller Integration" in feature for feature in features)
         assert any("Site Management & Statistics" in feature for feature in features)
@@ -321,9 +323,9 @@ class TestBuildFeatureList:
             password="password12345678",
         )
         settings = Settings(access_controller=access_controller)
-        
+
         features = _build_feature_list(settings)
-        
+
         # Should have access controller features
         assert any("Access Controller Integration" in feature for feature in features)
         assert any("Door Access Control & Unlock" in feature for feature in features)
@@ -331,11 +333,11 @@ class TestBuildFeatureList:
     def test_build_feature_list_with_rate_limiting(self):
         """Test building feature list with rate limiting."""
         settings = Settings()
-        
+
         # Mock rate limiting availability
-        with patch('unifi_mcp.server.RATE_LIMITING_AVAILABLE', True):
+        with patch("unifi_mcp.server.RATE_LIMITING_AVAILABLE", True):
             features = _build_feature_list(settings)
-            
+
             # Should include rate limiting feature
             assert any("Rate Limiting" in feature for feature in features)
 
@@ -349,8 +351,8 @@ class TestDisplayStartupMessage:
         features = ["Feature 1", "Feature 2"]
 
         # Mock ServerPanels availability and import
-        with patch('unifi_mcp.server.SERVERPANELS_AVAILABLE', True):
-            with patch('mcp_common.ui.ServerPanels') as mock_server_panels_class:
+        with patch("unifi_mcp.server.SERVERPANELS_AVAILABLE", True):
+            with patch("mcp_common.ui.ServerPanels") as mock_server_panels_class:
                 _display_startup_message(settings, features)
 
                 # Verify ServerPanels.startup_success was called
@@ -360,13 +362,13 @@ class TestDisplayStartupMessage:
         """Test displaying startup message without ServerPanels."""
         settings = Settings()
         features = ["Feature 1", "Feature 2"]
-        
+
         # Mock ServerPanels not available
-        with patch('unifi_mcp.server.SERVERPANELS_AVAILABLE', False):
+        with patch("unifi_mcp.server.SERVERPANELS_AVAILABLE", False):
             # Capture stderr output
-            with patch('sys.stderr') as mock_stderr:
+            with patch("sys.stderr") as mock_stderr:
                 _display_startup_message(settings, features)
-                
+
                 # Should write to stderr
                 assert mock_stderr.write.called
 
@@ -379,9 +381,9 @@ class TestRunServerInstance:
         # Create a mock server
         mock_server = Mock()
         settings = Settings()
-        
+
         _run_server_instance(mock_server, settings)
-        
+
         # Verify the server's run method was called with correct parameters
         mock_server.run.assert_called_once_with(
             host=settings.server.host,
@@ -396,14 +398,14 @@ class TestCreateServerWithErrorHandling:
     def test_create_server_with_error_handling(self):
         """Test creating server with error handling."""
         settings = Settings()
-        
+
         # Mock the create_server function
-        with patch('unifi_mcp.server.create_server') as mock_create_server:
+        with patch("unifi_mcp.server.create_server") as mock_create_server:
             mock_server = Mock()
             mock_create_server.return_value = mock_server
-            
+
             server = _create_server_with_error_handling(settings)
-            
+
             # Verify the server was created
             mock_create_server.assert_called_once_with(settings)
             assert server == mock_server

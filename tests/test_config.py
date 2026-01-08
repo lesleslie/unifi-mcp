@@ -1,7 +1,5 @@
 """Tests for the config module."""
 
-import os
-import sys
 from unittest.mock import Mock, patch
 
 import pytest
@@ -119,9 +117,9 @@ class TestSettings:
         settings = Settings()
 
         # Mock the EXCEPTIONS_AVAILABLE flag to be False
-        with patch('unifi_mcp.config.EXCEPTIONS_AVAILABLE', False):
+        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", False):
             # Mock sys.exit to prevent actual exit
-            with patch('sys.exit') as mock_exit:
+            with patch("sys.exit") as mock_exit:
                 settings.validate_credentials_at_startup()
                 # Check that sys.exit was called with code 1
                 mock_exit.assert_called_once_with(1)
@@ -188,7 +186,7 @@ class TestSettings:
         """Test get_masked_password when controller type doesn't exist."""
         settings = Settings()
         masked = settings.get_masked_password("nonexistent")
-        
+
         assert masked == "***"
 
     def test_get_masked_password_empty_password(self):
@@ -198,10 +196,10 @@ class TestSettings:
             username="admin",
             password="",
         )
-        
+
         settings = Settings(network_controller=network_controller)
         masked = settings.get_masked_password("network")
-        
+
         assert masked == "***"
 
     def test_get_masked_password_short_password(self):
@@ -211,30 +209,32 @@ class TestSettings:
             username="admin",
             password="abc",  # Less than 4 chars
         )
-        
+
         settings = Settings(network_controller=network_controller)
         masked = settings.get_masked_password("network")
-        
+
         assert masked == "***"
 
     def test_get_masked_password_with_security_available(self):
         """Test get_masked_password when security module is available."""
         # Mock the security module being available
-        with patch('unifi_mcp.config.SECURITY_AVAILABLE', True):
-            with patch('unifi_mcp.config.APIKeyValidator') as mock_validator:
+        with patch("unifi_mcp.config.SECURITY_AVAILABLE", True):
+            with patch("unifi_mcp.config.APIKeyValidator") as mock_validator:
                 mock_validator.mask_key.return_value = "MASKED_PASSWORD"
-                
+
                 network_controller = NetworkSettings(
                     host="network.example.com",
                     username="admin",
                     password="password123",
                 )
-                
+
                 settings = Settings(network_controller=network_controller)
                 masked = settings.get_masked_password("network")
-                
+
                 # Verify the mask_key method was called
-                mock_validator.mask_key.assert_called_once_with("password123", visible_chars=4)
+                mock_validator.mask_key.assert_called_once_with(
+                    "password123", visible_chars=4  # gitleaks:allow - test password
+                )
                 assert masked == "MASKED_PASSWORD"
 
 
@@ -252,9 +252,9 @@ class TestValidateUniFiCredentials:
 
     def test_validate_credentials_empty_username(self):
         """Test _validate_unifi_credentials with empty username."""
-        with patch('unifi_mcp.config.EXCEPTIONS_AVAILABLE', False):
-            with patch('unifi_mcp.config.SECURITY_AVAILABLE', False):
-                with patch('sys.exit') as mock_exit:
+        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", False):
+            with patch("unifi_mcp.config.SECURITY_AVAILABLE", False):
+                with patch("sys.exit") as mock_exit:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="",
@@ -264,9 +264,9 @@ class TestValidateUniFiCredentials:
 
     def test_validate_credentials_whitespace_username(self):
         """Test _validate_unifi_credentials with whitespace-only username."""
-        with patch('unifi_mcp.config.EXCEPTIONS_AVAILABLE', False):
-            with patch('unifi_mcp.config.SECURITY_AVAILABLE', False):
-                with patch('sys.exit') as mock_exit:
+        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", False):
+            with patch("unifi_mcp.config.SECURITY_AVAILABLE", False):
+                with patch("sys.exit") as mock_exit:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="   ",
@@ -276,9 +276,9 @@ class TestValidateUniFiCredentials:
 
     def test_validate_credentials_empty_password(self):
         """Test _validate_unifi_credentials with empty password."""
-        with patch('unifi_mcp.config.EXCEPTIONS_AVAILABLE', False):
-            with patch('unifi_mcp.config.SECURITY_AVAILABLE', False):
-                with patch('sys.exit') as mock_exit:
+        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", False):
+            with patch("unifi_mcp.config.SECURITY_AVAILABLE", False):
+                with patch("sys.exit") as mock_exit:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="admin",
@@ -288,9 +288,9 @@ class TestValidateUniFiCredentials:
 
     def test_validate_credentials_whitespace_password(self):
         """Test _validate_unifi_credentials with whitespace-only password."""
-        with patch('unifi_mcp.config.EXCEPTIONS_AVAILABLE', False):
-            with patch('unifi_mcp.config.SECURITY_AVAILABLE', False):
-                with patch('sys.exit') as mock_exit:
+        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", False):
+            with patch("unifi_mcp.config.SECURITY_AVAILABLE", False):
+                with patch("sys.exit") as mock_exit:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="admin",
@@ -301,9 +301,9 @@ class TestValidateUniFiCredentials:
     def test_validate_credentials_short_password(self):
         """Test _validate_unifi_credentials with short password."""
         # This should not raise an exception but may print warnings
-        with patch('unifi_mcp.config.EXCEPTIONS_AVAILABLE', False):
-            with patch('unifi_mcp.config.SECURITY_AVAILABLE', False):
-                with patch('sys.stderr'):
+        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", False):
+            with patch("unifi_mcp.config.SECURITY_AVAILABLE", False):
+                with patch("sys.stderr"):
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="admin",
@@ -313,12 +313,15 @@ class TestValidateUniFiCredentials:
     def test_validate_credentials_with_exceptions_available(self):
         """Test _validate_unifi_credentials when exceptions module is available."""
         # Mock the exceptions module being available
-        with patch('unifi_mcp.config.EXCEPTIONS_AVAILABLE', True):
+        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", True):
             mock_exception_class = Mock()
-            with patch.dict('unifi_mcp.config.__dict__', {
-                'CredentialValidationError': mock_exception_class,
-                'EXCEPTIONS_AVAILABLE': True
-            }):
+            with patch.dict(
+                "unifi_mcp.config.__dict__",
+                {
+                    "CredentialValidationError": mock_exception_class,
+                    "EXCEPTIONS_AVAILABLE": True,
+                },
+            ):
                 # We need to reimport the function to use the patched values
                 # For now, just test the path where exceptions are available
                 pass  # This is complex to test without restructuring the module

@@ -62,6 +62,20 @@ markers = [
     "no_leaks: detect asyncio task leaks",
 ]
 
+[tool.coverage.run]
+parallel = true
+branch = true
+source = ["unifi_mcp"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+
 [tool.creosote]
 paths = [
     "unifi_mcp",

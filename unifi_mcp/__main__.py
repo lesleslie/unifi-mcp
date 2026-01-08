@@ -9,7 +9,6 @@ from mcp_common.server import BaseOneiricServerMixin
 from mcp_common.server.runtime import create_runtime_components
 from oneiric.core.config import OneiricMCPConfig
 from oneiric.runtime.mcp_health import HealthStatus
-from pydantic import ConfigDict
 
 from unifi_mcp.config import Settings
 
@@ -24,10 +23,9 @@ class UniFiConfig(OneiricMCPConfig):
     http_host: str = "127.0.0.1"
     enable_http_transport: bool = True
 
-    model_config = ConfigDict(
-        env_prefix="UNIFI_MCP_",
-        env_file=".env",
-    )
+    class Config:
+        env_prefix = "UNIFI_MCP_"
+        env_file = ".env"
 
 
 class UniFiMCPServer(BaseOneiricServerMixin):

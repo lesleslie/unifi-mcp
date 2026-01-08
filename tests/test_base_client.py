@@ -1,8 +1,9 @@
 """Tests for the base client module."""
 
-from unittest.mock import AsyncMock, Mock, patch
-import pytest
+from unittest.mock import AsyncMock, Mock
+
 import httpx
+import pytest
 
 from unifi_mcp.clients.base_client import BaseUniFiClient
 
@@ -18,9 +19,9 @@ class TestBaseUniFiClient:
             username="admin",
             password="password123",
             verify_ssl=True,
-            timeout=30
+            timeout=30,
         )
-        
+
         assert client.host == "unifi.example.com"
         assert client.port == 8443
         assert client.username == "admin"
@@ -40,9 +41,9 @@ class TestBaseUniFiClient:
             username="testuser",
             password="testpass",
             verify_ssl=False,
-            timeout=60
+            timeout=60,
         )
-        
+
         assert client.host == "test.example.com"
         assert client.port == 9443
         assert client.username == "testuser"
@@ -57,9 +58,9 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
-        
+
         with pytest.raises(NotImplementedError):
             await client.authenticate()
 
@@ -69,7 +70,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
 
         # Mock the client's request method
@@ -94,7 +95,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
 
         # Mock the authenticate method
@@ -123,7 +124,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
 
         # Set CSRF token
@@ -143,7 +144,7 @@ class TestBaseUniFiClient:
 
         # Verify the request was made with CSRF token in headers
         call_args = client.client.request.call_args
-        headers = call_args.kwargs.get('headers', {})
+        headers = call_args.kwargs.get("headers", {})
         assert headers.get("X-CSRF-Token") == "test_csrf_token"
         assert result == {"status": "success"}
 
@@ -153,24 +154,24 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
-        
+
         # Mock responses: first 401, then success
         first_response = Mock()
         first_response.status_code = 401
         first_response.text = "Login required"
-        
+
         second_response = Mock()
         second_response.json.return_value = {"status": "success"}
         second_response.raise_for_status.return_value = None
         second_response.status_code = 200
-        
+
         client.client.request = AsyncMock(side_effect=[first_response, second_response])
         client.authenticate = AsyncMock(return_value=True)
-        
+
         result = await client._make_request("GET", "/api/test")
-        
+
         # Verify authenticate was called twice (initial and after 401)
         assert client.authenticate.call_count == 2
         # Verify the request was made twice (initial and retry)
@@ -183,7 +184,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
 
         # Mock the client's request method with non-dict response
@@ -207,14 +208,14 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
-        
+
         # Mock the aclose method
         client.client.aclose = AsyncMock()
-        
+
         await client.close()
-        
+
         # Verify aclose was called
         client.client.aclose.assert_called_once()
 
@@ -224,16 +225,16 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
-        
+
         # Mock the close method
         client.close = AsyncMock()
-        
+
         async with client as c:
             # Verify the context manager returns self
             assert c is client
-        
+
         # Verify close was called
         client.close.assert_called_once()
 
@@ -243,7 +244,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"
+            password="password123",
         )
 
         # Mock the client's request method
@@ -257,10 +258,7 @@ class TestBaseUniFiClient:
         client._authenticated = True  # Set as authenticated
 
         result = await client._make_request(
-            "POST",
-            "/api/test",
-            data={"key": "value"},
-            params={"param": "value"}
+            "POST", "/api/test", data={"key": "value"}, params={"param": "value"}
         )
 
         # Verify the request was made with correct parameters
@@ -269,7 +267,7 @@ class TestBaseUniFiClient:
             url="https://unifi.example.com:8443/api/test",
             json={"key": "value"},
             params={"param": "value"},
-            headers=client.client.headers
+            headers=client.client.headers,
         )
         assert result == {"status": "success"}
 
