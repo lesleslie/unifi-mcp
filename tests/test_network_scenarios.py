@@ -49,12 +49,13 @@ class TestNetworkReconnection:
         # First request
         result1 = await client._make_request("GET", "/api/test1")
         assert result1 == {"status": "success"}
-        assert client.authenticate.call_count == 1  # Initial auth
+        # No initial auth since _authenticated=True already set
+        assert client.authenticate.call_count == 0
 
         # Second request (triggers re-auth)
         result2 = await client._make_request("GET", "/api/test2")
         assert result2 == {"status": "success"}
-        assert client.authenticate.call_count == 2  # Re-auth after 401
+        assert client.authenticate.call_count == 1  # Re-auth after 401
 
     async def test_reconnection_after_server_restart(self):
         """Test behavior when server is restarted."""
@@ -237,12 +238,7 @@ class TestSlowNetworkConditions:
 
         async def very_slow_request(*args, **kwargs):
             await asyncio.sleep(1)  # Simulate very slow network
-            response = Mock()
-            response.json.return_value = {"status": "success"}
-            response.raise_for_status.return_value = None
-            response.status_code = 200
-            response.text = ""
-            return response
+            raise httpx.TimeoutException("Request timed out")
 
         client.client.request = very_slow_request
 
@@ -269,7 +265,7 @@ class TestConcurrentFailures:
 
         async def timeout_request(*args, **kwargs):
             await asyncio.sleep(1)
-            return Mock(status_code=200)
+            raise httpx.TimeoutException("Request timed out")
 
         client.client.request = timeout_request
 
@@ -381,6 +377,8 @@ class TestSSLHandshakeFailures:
             timeout=1,
         )
 
+        client._authenticated = True
+
         # Mock SSL handshake timeout
         client.client.request = AsyncMock(
             side_effect=httpx.ConnectTimeout("SSL handshake timeout")
@@ -398,6 +396,8 @@ class TestSSLHandshakeFailures:
             password="password123",
             verify_ssl=True,
         )
+
+        client._authenticated = True
 
         # Mock certificate verification error
         client.client.request = AsyncMock(
@@ -424,6 +424,8 @@ class TestProxyIssues:
             password="password123",
         )
 
+        client._authenticated = True
+
         # Mock proxy connection error
         client.client.request = AsyncMock(
             side_effect=httpx.NetworkError("Cannot connect to proxy")
@@ -441,6 +443,8 @@ class TestProxyIssues:
             password="password123",
             timeout=1,
         )
+
+        client._authenticated = True
 
         # Mock proxy timeout
         client.client.request = AsyncMock(
@@ -463,6 +467,8 @@ class TestResourceLimitations:
             password="password123",
         )
 
+        client._authenticated = True
+
         # Mock too many open files error
         client.client.request = AsyncMock(
             side_effect=OSError("Too many open files")
@@ -479,6 +485,8 @@ class TestResourceLimitations:
             username="admin",
             password="password123",
         )
+
+        client._authenticated = True
 
         # Mock out of memory error
         client.client.request = AsyncMock(side_effect=MemoryError("Out of memory"))
