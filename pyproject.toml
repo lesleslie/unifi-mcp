@@ -32,6 +32,11 @@ fix = true
 unsafe-fixes = true
 show-fixes = true
 output-format = "full"
+exclude = [
+    "tests/",
+    "test_*.py",
+    "*_test.py",
+]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -50,6 +55,9 @@ ignore = [
 fixable = [
     "ALL",
 ]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -76,7 +84,34 @@ exclude_lines = [
     "if __name__ == .__main__.:",
 ]
 
+[tool.bandit]
+target = [
+    "unifi-mcp",
+]
+skips = [
+    "B101",
+    "B110",
+    "B112",
+    "B404",
+    "B603",
+    "B607",
+]
+exclude_dirs = [
+    "tests/",
+]
+
 [tool.creosote]
 paths = [
     "unifi_mcp",
+]
+deps-file = "pyproject.toml"
+exclude-deps = [
+    "hatchling",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-mock",
+    "pytest-xdist",
+    "pytest-timeout",
+    "ruff",
 ]

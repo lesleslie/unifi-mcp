@@ -6,10 +6,14 @@ tests/test_access_tools.py
 tests/test_base_client.py
 tests/test_cli.py
 tests/test_config.py
+tests/test_edge_cases.py
 tests/test_main_module.py
 tests/test_main_py.py
 tests/test_network_client.py
+tests/test_network_scenarios.py
 tests/test_network_tools.py
+tests/test_retry_utils.py
+tests/test_security.py
 tests/test_server.py
 tests/test_unifi_mcp.py
 tests/test_unifi_runtime.py

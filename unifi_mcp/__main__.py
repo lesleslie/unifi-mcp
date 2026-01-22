@@ -31,16 +31,26 @@ class UniFiConfig(OneiricMCPConfig):
 class UniFiMCPServer(BaseOneiricServerMixin):
     """UniFi MCP Server with Oneiric integration."""
 
-    def __init__(self, config: UniFiConfig):
-        self.config = config
+    def __init__(self, config: UniFiConfig) -> None:
+        # Store config with type annotation for base class compatibility
+        # The base class expects MCPBaseSettings | MCPServerSettings, but
+        # UniFiConfig is a subclass of OneiricMCPConfig
+        object.__init__(self)  # Initialize object base
+        self._config = config  # Private storage
+
         # Convert to UniFi Settings for compatibility
-        self.settings = self._convert_to_unifi_settings(config)
+        self.settings: Settings = self._convert_to_unifi_settings(config)
         self.server = create_server(self.settings)
 
         # Initialize runtime components using mcp-common helper
         self.runtime = create_runtime_components(
             server_name="unifi-mcp", cache_dir=config.cache_dir or ".oneiric_cache"
         )
+
+    @property
+    def config(self) -> UniFiConfig:  # type: ignore[override]
+        """Return config with proper type annotation."""
+        return self._config
 
     def _convert_to_unifi_settings(self, config: UniFiConfig) -> Settings:
         """Convert Oneiric config to UniFi Settings."""

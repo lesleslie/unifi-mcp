@@ -5,3 +5,35 @@
 /htmlcov/
 /__pycache__/
 __pycache__/
+
+# Crackerjack patterns
+
+
+
+
+# Build/Distribution
+# Caches
+# Coverage
+# Crackerjack specific
+# Development
+*.egg-info/
+*.pyc
+.DS_STORE
+.coverage*
+.crackerjack-*
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.venv/
+/.benchmarks/
+/.claude/
+/.envrc
+/.venv/
+/__pycache__/
+/build/
+/dist/
+/htmlcov/
+__pycache__/
+crackerjack-ai-debug-*.log
+crackerjack-debug-*.log
+htmlcov/
