@@ -10,6 +10,53 @@ A FastMCP server for managing UniFi Network and Access controllers.
 
 This server provides MCP (Model Context Protocol) tools to interact with UniFi Network and Access controllers, allowing you to manage devices, sites, users, and other UniFi entities through an MCP interface.
 
+### System Architecture
+
+```mermaid
+graph TB
+    subgraph "MCP Client Layer"
+        A[MCP Client<br/>AI Assistant]
+    end
+
+    subgraph "MCP Server Layer"
+        B[FastMCP Server]
+        C{Configuration<br/>Manager}
+        F[Tool Registration<br/>System]
+    end
+
+    subgraph "Controller Layer"
+        D[Network Controller<br/>UniFi Network API]
+        E[Access Controller<br/>UniFi Access API]
+    end
+
+    subgraph "Tool Layer"
+        G[Network Tools<br/>get_sites, get_devices<br/>get_clients, get_wlans<br/>restart_device, toggle_ap]
+        H[Access Tools<br/>get_access_points<br/>get_users, unlock_door<br/>set_access_schedule]
+    end
+
+    subgraph "Data Models"
+        I[Pydantic Models<br/>NetworkDevice, NetworkClient<br/>NetworkWLAN, AccessPoint]
+    end
+
+    A --> B
+    B --> C
+    C -->|Configured| D
+    C -->|Configured| E
+    D --> G
+    E --> H
+    F --> G
+    F --> H
+    G --> I
+    H --> I
+
+    style A fill:#e1f5ff
+    style B fill:#fff4e1
+    style D fill:#e8f5e9
+    style E fill:#e8f5e9
+    style G fill:#f3e5f5
+    style H fill:#f3e5f5
+```
+
 ## Features
 
 - **UniFi Network Controller Integration**: Manage sites, devices, clients, and WLANs

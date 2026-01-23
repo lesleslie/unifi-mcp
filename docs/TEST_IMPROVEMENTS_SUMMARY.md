@@ -4,6 +4,17 @@
 
 Added **2,021 lines** of comprehensive security and edge case tests across 4 new test files, bringing the total test suite to **238 tests** (up from ~180).
 
+### Test Coverage Visualization
+
+```mermaid
+pie title Test Suite Distribution
+    "Security Tests (17)" : 17
+    "Edge Case Tests (38)" : 38
+    "Retry Utils Tests (35)" : 35
+    "Network Scenario Tests (24)" : 24
+    "Other Tests (124)" : 124
+```
+
 ## New Test Files Created
 
 ### 1. test_security.py (386 lines)

@@ -235,6 +235,45 @@ Following our **Clean Code Philosophy** where every line of code is a liability:
   - This validates proper typing, formatting, linting, and test success
   - Consider code incomplete until it passes this validation
 
+### Development Workflow
+
+```mermaid
+flowchart TD
+    A[Start Task] --> B{Plan Required?}
+    B -->|Yes| C[Use EnterPlanMode]
+    B -->|No| D[Implement Directly]
+
+    C --> E[Explore Codebase]
+    E --> F[Design Approach]
+    F --> G[Present Plan to User]
+    G --> H{User Approval?}
+    H -->|No| E
+    H -->|Yes| D
+
+    D --> I[Write/Modify Code]
+    I --> J[Run Tests]
+    J --> K{Tests Pass?}
+    K -->|No| L[Fix Issues]
+    L --> J
+    K -->|Yes| M[Run Quality Checks]
+    M --> N{Checks Pass?}
+    N -->|No| O[Apply Fixes]
+    O --> M
+    N -->|Yes| P[Update Documentation]
+    P --> Q[Create Commit]
+
+    Q --> R{Commit Required?}
+    R -->|Yes| S[git add && git commit]
+    R -->|No| T[Complete]
+    S --> T
+
+    style A fill:#e1f5ff
+    style T fill:#e8f5e9
+    style K fill:#fff3e0
+    style N fill:#fff3e0
+    style H fill:#fff3e0
+```
+
 - **Error Handling**
 
   - Use structured exception handling with specific exception types

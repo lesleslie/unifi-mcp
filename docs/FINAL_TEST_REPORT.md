@@ -4,6 +4,43 @@
 
 Successfully improved the unifi-mcp test suite by adding **94 comprehensive security and edge case tests**, bringing the total to **250 passing tests** with 100% pass rate.
 
+### Test Suite Evolution Timeline
+
+```mermaid
+gantt
+    title Test Suite Development Timeline
+    dateFormat  HH:mm
+    axisFormat %H:%M
+
+    section Security Tests
+    SQL Injection Tests     :done, s1, 00:00, 30m
+    XSS Prevention Tests    :done, s2, after s1, 30m
+    Command Injection Tests :done, s3, after s2, 30m
+    Path Traversal Tests    :done, s4, after s3, 30m
+    LDAP Injection Tests    :done, s5, after s4, 30m
+    Input Validation Tests  :done, s6, after s5, 1h
+
+    section Edge Case Tests
+    Timeout Scenarios       :done, e1, 00:00, 1h
+    Connection Failures     :done, e2, after e1, 1h
+    HTTP Error Handling     :done, e3, after e2, 1h
+    Malformed Responses     :done, e4, after e3, 1h
+    Boundary Value Tests    :done, e5, after e4, 1h
+    Concurrent Operations   :done, e6, after e5, 1h
+
+    section Network Scenarios
+    Network Reconnection    :done, n1, 00:00, 1h
+    SSL Handshake Issues    :done, n2, after n1, 1h
+    Proxy Issues            :done, n3, after n2, 1h
+    Resource Limitations    :done, n4, after n3, 1h
+
+    section Retry Logic
+    Delay Calculation       :done, r1, 00:00, 1h
+    Exponential Backoff     :done, r2, after r1, 1h
+    Exception Filtering     :done, r3, after r2, 1h
+    Edge Case Validation    :done, r4, after r3, 1h
+```
+
 ## Test Suite Metrics
 
 ### Before Improvements
@@ -129,6 +166,78 @@ Comprehensive testing of:
 - **CSRF Protection**: Token handling and header injection prevention
 - **Access Control**: Unauthorized operation prevention
 - **Rate Limiting**: DoS protection validation
+
+### Security Test Coverage Map
+
+```mermaid
+mindmap
+  root((Security Tests))
+    Injection Prevention
+      SQL Injection
+        DROP TABLE
+        UNION SELECT
+        Boolean-based
+        Time-based
+        Stacked queries
+      XSS Attacks
+        Script tags
+        img onerror
+        javascript: protocol
+        SVG-based
+        CSS expression
+      Command Injection
+        Pipe operator
+        Semicolon
+        Double ampersand
+        Backticks
+        Command substitution
+      Path Traversal
+        ../ sequences
+        ..\\ Windows
+        URL encoding
+        Double encoding
+        Unicode bypass
+      LDAP Injection
+        Wildcard *
+        Boolean logic
+        AND/OR
+        Parentheses
+        Comment bypass
+    Input Validation
+      MAC Addresses
+        Colon format
+        Hyphen format
+        Cisco format
+        Invalid lengths
+        Invalid characters
+      Boundary Values
+        Long inputs
+        Unicode
+        Special chars
+        Null bytes
+        Binary data
+      Authentication
+        Empty credentials
+        Long credentials
+        SQL in username
+        XSS in password
+    Access Control
+      CSRF Protection
+        Token validation
+        Header injection
+        Token rotation
+        SameSite checks
+      Authorization
+        Unauthorized access
+        Privilege escalation
+        Resource access
+        Operation checks
+      Rate Limiting
+        DoS protection
+        Request throttling
+        IP-based limits
+        User-based limits
+```
 
 ## Edge Case Improvements Delivered
 
