@@ -1,4 +1,0 @@
-fastmcp>=2.12.3
-mcp-common>=0.4.8
-oneiric>=0.3.6
-pydantic[email]>=2.11.9

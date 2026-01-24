@@ -4,12 +4,12 @@
     "entry_nodes": [
       "configuration"
     ],
-    "node_count": 6,
+    "node_count": 7,
     "nodes": [
       {
         "attempts": 1,
         "depends_on": [],
-        "duration_ms": 3.9909040206111968,
+        "duration_ms": 4.316759994253516,
         "node": "configuration",
         "retry_policy": null,
         "task": "configuration"
@@ -19,7 +19,17 @@
         "depends_on": [
           "configuration"
         ],
-        "duration_ms": 222350.24672400323,
+        "duration_ms": 24.158045009244233,
+        "node": "documentation_cleanup",
+        "retry_policy": null,
+        "task": "documentation_cleanup"
+      },
+      {
+        "attempts": 1,
+        "depends_on": [
+          "documentation_cleanup"
+        ],
+        "duration_ms": 93194.34014899889,
         "node": "fast_hooks",
         "retry_policy": null,
         "task": "fast_hooks"
@@ -29,7 +39,7 @@
         "depends_on": [
           "fast_hooks"
         ],
-        "duration_ms": 50688.29121399904,
+        "duration_ms": 45629.54807697679,
         "node": "tests",
         "retry_policy": null,
         "task": "tests"
@@ -39,7 +49,7 @@
         "depends_on": [
           "tests"
         ],
-        "duration_ms": 54586.87368998653,
+        "duration_ms": 41992.44004098,
         "node": "comprehensive_hooks",
         "retry_policy": null,
         "task": "comprehensive_hooks"
@@ -49,7 +59,7 @@
         "depends_on": [
           "comprehensive_hooks"
         ],
-        "duration_ms": 0.6001210131216794,
+        "duration_ms": 12085.611205024179,
         "node": "publishing",
         "retry_policy": null,
         "task": "publishing"
@@ -59,14 +69,14 @@
         "depends_on": [
           "publishing"
         ],
-        "duration_ms": 0.25948398979380727,
+        "duration_ms": 1.4757930184714496,
         "node": "commit",
         "retry_policy": null,
         "task": "commit"
       }
     ],
-    "recorded_at": "2026-01-23T00:39:50.722984+00:00",
-    "total_duration_ms": 327630.2621370123,
+    "recorded_at": "2026-01-23T00:51:35.090185+00:00",
+    "total_duration_ms": 192931.89007000183,
     "workflow": "crackerjack"
   }
 }
