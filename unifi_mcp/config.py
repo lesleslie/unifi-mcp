@@ -1,9 +1,15 @@
 """Pydantic configuration models for UniFi MCP server."""
 
 import importlib.util
+import logging
 import sys
+from typing import Any
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from unifi_mcp.credentials import get_setup_instructions, resolve_controller_credential
+
+logger = logging.getLogger(__name__)
 
 # Import security utilities for password validation (Phase 3 Security Hardening)
 try:
@@ -19,7 +25,6 @@ EXCEPTIONS_AVAILABLE = importlib.util.find_spec("mcp_common.exceptions") is not 
 if EXCEPTIONS_AVAILABLE:
     from mcp_common.exceptions import (
         CredentialValidationError,
-        ServerConfigurationError,
     )
 
 
@@ -63,7 +68,13 @@ class ServerSettings(BaseSettings):
 
 
 class Settings(BaseSettings):
-    """Main application settings."""
+    """Main application settings.
+
+    Credentials are resolved in this order:
+    1. Environment variables / .env file (via Pydantic Settings)
+    2. macOS Keychain (via keyring) — tried for missing fields
+    3. Soft failure — server starts in limited mode if no controllers configured
+    """
 
     # UniFi controller settings
     network_controller: NetworkSettings | None = None
@@ -77,6 +88,78 @@ class Settings(BaseSettings):
         env_file=".env",
         env_nested_delimiter="__",
     )
+
+    def model_post_init(self, __context: Any) -> None:
+        """Resolve missing credentials from macOS Keychain after Pydantic loads."""
+        self.network_controller = self._resolve_controller(
+            "network-controller", self.network_controller, NetworkSettings, "8443"
+        )
+        self.access_controller = self._resolve_controller(
+            "access-controller", self.access_controller, AccessSettings, "8444"
+        )
+        self.local_api = self._resolve_controller(
+            "local-api", self.local_api, LocalSettings, "1234"
+        )
+
+    def _resolve_controller(
+        self,
+        controller_type: str,
+        controller: UniFiSettings | None,
+        settings_class: type,
+        default_port: str,
+    ) -> UniFiSettings | None:
+        """Resolve controller credentials from keychain if missing.
+
+        Checks if a controller is partially or fully configured. If credentials
+        are missing from env/.env, attempts to fill them from macOS Keychain.
+        """
+        # Build a dict of what we have so far
+        if controller is not None:
+            fields = {
+                "host": controller.host,
+                "port": controller.port,
+                "username": controller.username,
+                "password": controller.password,
+                "site_id": controller.site_id,
+                "verify_ssl": controller.verify_ssl,
+                "timeout": controller.timeout,
+            }
+        else:
+            # Check if keychain has credentials for this controller type
+            fields = {
+                "host": None,
+                "port": int(default_port),
+                "username": None,
+                "password": None,
+            }
+
+        # Try to fill missing fields from keychain
+        changed = False
+        for field_name in ("host", "username", "password"):
+            if not fields.get(field_name):
+                value = resolve_controller_credential(controller_type, field_name, None)
+                if value:
+                    fields[field_name] = value
+                    changed = True
+
+        # If we still don't have the minimum required fields, return as-is
+        if (
+            not fields.get("host")
+            or not fields.get("username")
+            or not fields.get("password")
+        ):
+            if changed:
+                logger.warning(
+                    "Partial credentials for %s in keychain — need host, username, AND password",
+                    controller_type,
+                )
+            return controller
+
+        # Rebuild the controller settings with resolved values
+        if changed or controller is None:
+            return settings_class(**fields)
+
+        return controller
 
     def validate_credentials_at_startup(self) -> None:
         """Validate UniFi controller credentials at server startup.
@@ -101,19 +184,13 @@ class Settings(BaseSettings):
             controllers_to_validate.append(("Local API", self.local_api))
 
         if not controllers_to_validate:
-            if EXCEPTIONS_AVAILABLE:
-                raise ServerConfigurationError(
-                    message="At least one controller (network/access/local) is required",
-                    field="controllers",
-                )
-            else:
-                # Fallback to sys.exit if exceptions unavailable
-                print("\n⚠️  No UniFi controllers configured", file=sys.stderr)
-                print(
-                    "   At least one controller (network/access/local) is required",
-                    file=sys.stderr,
-                )
-                sys.exit(1)
+            # Soft warning instead of crash — server starts with reduced capability
+            print(
+                "\n⚠️  No UniFi controllers configured — running in limited mode",
+                file=sys.stderr,
+            )
+            print(get_setup_instructions(), file=sys.stderr)
+            return
 
         # Validate each configured controller
         for controller_name, controller in controllers_to_validate:

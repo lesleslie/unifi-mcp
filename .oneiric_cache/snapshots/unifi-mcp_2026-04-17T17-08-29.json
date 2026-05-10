@@ -1,0 +1,28 @@
+{
+  "server_name": "unifi-mcp",
+  "timestamp": "2026-04-17T17-08-29",
+  "version": "1.0",
+  "components": {
+    "server": {
+      "status": "started",
+      "timestamp": "2026-04-17T17:08:29Z",
+      "config": {
+        "http_port": 3038,
+        "http_host": "127.0.0.1",
+        "debug": false,
+        "enable_http_transport": true
+      }
+    },
+    "controllers": {
+      "status": "validated",
+      "timestamp": "2026-04-18T00:08:29Z",
+      "network_controller": true,
+      "access_controller": false,
+      "local_api": false
+    }
+  },
+  "metadata": {
+    "system_time": 1776470909.540685,
+    "python_version": "3.13"
+  }
+}

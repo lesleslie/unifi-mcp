@@ -1,9 +1,17 @@
 """Data models for UniFi Network Controller entities."""
 
-from pydantic import BaseModel
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict
 
 
-class NetworkDevice(BaseModel):
+class UnifiBaseModel(BaseModel):
+    """Base model for all UniFi entities with extra field handling."""
+
+    model_config = ConfigDict(extra="ignore", populate_by_name=True)
+
+
+class NetworkDevice(UnifiBaseModel):
     """Model for a UniFi network device."""
 
     mac: str
@@ -18,10 +26,10 @@ class NetworkDevice(BaseModel):
     adopted: bool
     site_id: str
     disabled: bool | None = None
-    port_table: list[dict] | None = None
+    port_table: list[dict[str, Any]] | None = None
 
 
-class NetworkClient(BaseModel):
+class NetworkClient(UnifiBaseModel):
     """Model for a UniFi network client."""
 
     mac: str
@@ -30,7 +38,7 @@ class NetworkClient(BaseModel):
     hostname: str | None = None
     oui: str | None = None
     is_wired: bool
-    uplink: dict | None = None
+    uplink: dict[str, Any] | None = None
     site_id: str
     first_seen: int | None = None
     last_seen: int | None = None
@@ -39,10 +47,10 @@ class NetworkClient(BaseModel):
     dev_id_override: str | None = None
 
 
-class NetworkWLAN(BaseModel):
+class NetworkWLAN(UnifiBaseModel):
     """Model for a UniFi WLAN configuration."""
 
-    _id: str
+    id: str
     name: str
     site_id: str
     wlan_id: str
@@ -57,10 +65,10 @@ class NetworkWLAN(BaseModel):
     dtim_ng: int | None = None
 
 
-class NetworkSite(BaseModel):
+class NetworkSite(UnifiBaseModel):
     """Model for a UniFi site."""
 
-    _id: str
+    id: str
     name: str
     desc: str | None = None
     role: str | None = None

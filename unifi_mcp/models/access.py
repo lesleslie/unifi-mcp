@@ -2,10 +2,16 @@
 
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
-class AccessPoint(BaseModel):
+class UnifiAccessBaseModel(BaseModel):
+    """Base model for all UniFi Access entities with extra field handling."""
+
+    model_config = ConfigDict(extra="ignore", populate_by_name=True)
+
+
+class AccessPoint(UnifiAccessBaseModel):
     """Model for a UniFi Access Point."""
 
     mac: str
@@ -19,7 +25,7 @@ class AccessPoint(BaseModel):
     floorplan_id: str | None = None
 
 
-class AccessUser(BaseModel):
+class AccessUser(UnifiAccessBaseModel):
     """Model for a UniFi Access user."""
 
     user_id: str
@@ -32,7 +38,7 @@ class AccessUser(BaseModel):
     created_time: int | None = None
 
 
-class AccessLog(BaseModel):
+class AccessLog(UnifiAccessBaseModel):
     """Model for a UniFi Access log entry."""
 
     log_id: str
@@ -46,7 +52,7 @@ class AccessLog(BaseModel):
     event_type: str | None = None
 
 
-class AccessDoor(BaseModel):
+class AccessDoor(UnifiAccessBaseModel):
     """Model for a UniFi Access door."""
 
     door_id: str

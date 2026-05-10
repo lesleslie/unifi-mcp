@@ -1,6 +1,6 @@
 [project]
 name = "unifi-mcp"
-version = "0.2.5"
+version = "0.2.7"
 description = "Unofficial MCP server for the UniFi Site Manager, Access, and Network APIs"
 authors = [
     { name = "Les Leslie", email = "les@wedgwoodwebworks.com" },
@@ -8,6 +8,7 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "fastmcp>=2.12.3",
+    "keyring>=25.0",
     "mcp-common>=0.4.8",
     "oneiric>=0.3.6",
     "pydantic[email]>=2.11.9",
@@ -16,7 +17,6 @@ dependencies = [
 [dependency-groups]
 dev = [
     "crackerjack>=0.38.13",
-    "excalidraw-mcp>=0.34.0",
     "session-buddy>=0.3.13",
 ]
 

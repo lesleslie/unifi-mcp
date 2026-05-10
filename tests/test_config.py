@@ -101,45 +101,130 @@ class TestSettings:
             username="admin",
             password="password123",
         )
-
         settings = Settings(
             network_controller=network_controller,
             access_controller=access_controller,
             local_api=local_api,
         )
-
         assert settings.network_controller is not None
         assert settings.access_controller is not None
         assert settings.local_api is not None
 
     def test_validate_credentials_at_startup_no_controllers(self):
-        """Test validate_credentials_at_startup when no controllers are configured."""
+        """Test validation when no controllers are configured."""
         settings = Settings()
 
-        # Mock the EXCEPTIONS_AVAILABLE flag to be False
-        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", False):
-            # Mock sys.exit to prevent actual exit
-            with patch("sys.exit") as mock_exit:
+        # Should raise or exit when no controllers configured
+        with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", True):
+            from mcp_common.exceptions import ServerConfigurationError
+
+            with pytest.raises(ServerConfigurationError):
                 settings.validate_credentials_at_startup()
-                # Check that sys.exit was called with code 1
-                mock_exit.assert_called_once_with(1)
 
     def test_validate_credentials_at_startup_with_controllers(self):
-        """Test validate_credentials_at_startup with controllers configured."""
+        """Test validation with controllers configured."""
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="password12345678",  # Long enough to pass basic validation
+            password="password12345678",  # 12+ chars to pass security validation
         )
-
         settings = Settings(network_controller=network_controller)
 
-        # This should not raise an exception or exit
-        try:
+        # Mock the validation function to avoid actual validation
+        with patch("unifi_mcp.config._validate_unifi_credentials"):
             settings.validate_credentials_at_startup()
-        except SystemExit:
-            # We might still get a SystemExit if password is considered weak
-            # but with a long enough password it should pass
+
+    def test_get_masked_password_network_controller(self):
+        """Test getting masked password for network controller."""
+        network_controller = NetworkSettings(
+            host="network.example.com",
+            username="admin",
+            password="mySecretPassword123",
+        )
+        settings = Settings(network_controller=network_controller)
+
+        masked = settings.get_masked_password("network")
+        assert "***" in masked or "..." in masked
+        assert "mySecretPassword123" not in masked
+
+    def test_get_masked_password_access_controller(self):
+        """Test getting masked password for access controller."""
+        access_controller = AccessSettings(
+            host="access.example.com",
+            username="admin",
+            password="accessPass456",
+        )
+        settings = Settings(access_controller=access_controller)
+
+        masked = settings.get_masked_password("access")
+        assert "***" in masked or "..." in masked
+        assert "accessPass456" not in masked
+
+    def test_get_masked_password_local_controller(self):
+        """Test getting masked password for local API."""
+        local_api = LocalSettings(
+            host="local.example.com",
+            username="admin",
+            password="localPass789",
+        )
+        settings = Settings(local_api=local_api)
+
+        masked = settings.get_masked_password("local")
+        assert "***" in masked or "..." in masked
+        assert "localPass789" not in masked
+
+    def test_get_masked_password_no_controller(self):
+        """Test getting masked password when controller not configured."""
+        settings = Settings()
+
+        masked = settings.get_masked_password("network")
+        assert masked == "***"
+
+    def test_get_masked_password_empty_password(self):
+        """Test getting masked password with empty password."""
+        network_controller = NetworkSettings(
+            host="network.example.com",
+            username="admin",
+            password="",
+        )
+        settings = Settings(network_controller=network_controller)
+
+        masked = settings.get_masked_password("network")
+        assert masked == "***"
+
+    def test_get_masked_password_short_password(self):
+        """Test getting masked password with short password."""
+        network_controller = NetworkSettings(
+            host="network.example.com",
+            username="admin",
+            password="short",
+        )
+        settings = Settings(network_controller=network_controller)
+
+        # When security is unavailable, short passwords return "***"
+        with patch("unifi_mcp.config.SECURITY_AVAILABLE", False):
+            masked = settings.get_masked_password("network")
+            assert masked == "***"
+
+    def test_get_masked_password_with_security_available(self):
+        """Test getting masked password with security module available."""
+        network_controller = NetworkSettings(
+            host="network.example.com",
+            username="admin",
+            password="mySecurePassword12345",
+        )
+        settings = Settings(network_controller=network_controller)
+
+        # Mock the security module
+        with patch("unifi_mcp.config.SECURITY_AVAILABLE", True):
+            with patch("unifi_mcp.config.APIKeyValidator") as mock_validator:
+                mock_validator.mask_key.return_value = "...rd12345"
+
+                masked = settings.get_masked_password("network")
+                assert masked == "...rd12345"
+                mock_validator.mask_key.assert_called_once_with(
+                    "mySecurePassword12345", visible_chars=4
+                )
             pass
 
     def test_get_masked_password_network_controller(self):

@@ -44,6 +44,21 @@ def create_server(settings: Settings) -> FastMCP:
         name="UniFi Controller MCP Server",
     )
 
+    # HTTP health endpoint for Claude Code compatibility
+    @server.custom_route("/health", methods=["GET"])
+    async def health_check(request: Any) -> Any:
+        """HTTP health check endpoint for Claude Code `mcp list` compatibility."""
+        from starlette.responses import JSONResponse
+
+        return JSONResponse({"status": "ok", "service": "unifi", "version": "1.0.0"})
+
+    @server.custom_route("/healthz", methods=["GET"])
+    async def healthz_check(request: Any) -> Any:
+        """Kubernetes-style health check endpoint."""
+        from starlette.responses import JSONResponse
+
+        return JSONResponse({"status": "ok"})
+
     # Add rate limiting middleware to protect UniFi API from excessive requests
     if RATE_LIMITING_AVAILABLE:
         from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
@@ -443,11 +458,31 @@ def _run_server_instance(server: FastMCP, settings: Settings) -> None:
     )
 
 
-# Export ASGI app for uvicorn (standardized startup pattern)
-# Create a default server instance for uvicorn
-_default_settings = Settings()
-_default_server = create_server(_default_settings)
-http_app = _default_server.http_app
+# Global server instance for lazy initialization
+_server: FastMCP | None = None
+_settings: Settings | None = None
+
+
+def get_app() -> FastMCP:
+    """Get or create the FastMCP server instance (lazy initialization)."""
+    global _server, _settings
+    if _server is None:
+        if _settings is None:
+            _settings = Settings()
+        _server = create_server(_settings)
+    return _server
+
+
+def __getattr__(name: str) -> Any:
+    """Lazy attribute access for uvicorn compatibility.
+
+    Enables `uvicorn unifi_mcp.server:http_app --factory` pattern.
+    """
+    if name == "app":
+        return get_app()
+    if name == "http_app":
+        return get_app().http_app
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 
 if __name__ == "__main__":

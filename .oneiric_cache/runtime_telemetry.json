@@ -4,12 +4,12 @@
     "entry_nodes": [
       "configuration"
     ],
-    "node_count": 7,
+    "node_count": 4,
     "nodes": [
       {
         "attempts": 1,
         "depends_on": [],
-        "duration_ms": 4.316759994253516,
+        "duration_ms": 11.862893996294588,
         "node": "configuration",
         "retry_policy": null,
         "task": "configuration"
@@ -19,7 +19,7 @@
         "depends_on": [
           "configuration"
         ],
-        "duration_ms": 24.158045009244233,
+        "duration_ms": 34.45657796692103,
         "node": "documentation_cleanup",
         "retry_policy": null,
         "task": "documentation_cleanup"
@@ -29,37 +29,7 @@
         "depends_on": [
           "documentation_cleanup"
         ],
-        "duration_ms": 93194.34014899889,
-        "node": "fast_hooks",
-        "retry_policy": null,
-        "task": "fast_hooks"
-      },
-      {
-        "attempts": 1,
-        "depends_on": [
-          "fast_hooks"
-        ],
-        "duration_ms": 45629.54807697679,
-        "node": "tests",
-        "retry_policy": null,
-        "task": "tests"
-      },
-      {
-        "attempts": 1,
-        "depends_on": [
-          "tests"
-        ],
-        "duration_ms": 41992.44004098,
-        "node": "comprehensive_hooks",
-        "retry_policy": null,
-        "task": "comprehensive_hooks"
-      },
-      {
-        "attempts": 1,
-        "depends_on": [
-          "comprehensive_hooks"
-        ],
-        "duration_ms": 12085.611205024179,
+        "duration_ms": 16358.925939013716,
         "node": "publishing",
         "retry_policy": null,
         "task": "publishing"
@@ -69,14 +39,14 @@
         "depends_on": [
           "publishing"
         ],
-        "duration_ms": 1.4757930184714496,
+        "duration_ms": 1.8540620221756399,
         "node": "commit",
         "retry_policy": null,
         "task": "commit"
       }
     ],
-    "recorded_at": "2026-01-23T00:51:35.090185+00:00",
-    "total_duration_ms": 192931.89007000183,
+    "recorded_at": "2026-01-24T22:01:37.052092+00:00",
+    "total_duration_ms": 16407.099472999107,
     "workflow": "crackerjack"
   }
 }
