@@ -1,28 +1,28 @@
 {
-  "server_name": "unifi-mcp",
-  "timestamp": "2026-05-03T00-34-14",
-  "version": "1.0",
   "components": {
-    "server": {
-      "status": "started",
-      "timestamp": "2026-05-03T00:34:14Z",
-      "config": {
-        "http_port": 3038,
-        "http_host": "127.0.0.1",
-        "debug": false,
-        "enable_http_transport": true
-      }
-    },
     "controllers": {
-      "status": "validated",
-      "timestamp": "2026-05-03T07:34:14Z",
-      "network_controller": true,
       "access_controller": false,
-      "local_api": false
+      "local_api": false,
+      "network_controller": true,
+      "status": "validated",
+      "timestamp": "2026-05-03T07:34:14Z"
+    },
+    "server": {
+      "config": {
+        "debug": false,
+        "enable_http_transport": true,
+        "http_host": "127.0.0.1",
+        "http_port": 3038
+      },
+      "status": "started",
+      "timestamp": "2026-05-03T00:34:14Z"
     }
   },
   "metadata": {
-    "system_time": 1777793654.125175,
-    "python_version": "3.13"
-  }
+    "python_version": "3.13",
+    "system_time": 1777793654.125175
+  },
+  "server_name": "unifi-mcp",
+  "timestamp": "2026-05-03T00-34-14",
+  "version": "1.0"
 }

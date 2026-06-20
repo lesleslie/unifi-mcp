@@ -1,5 +1,7 @@
 """Pydantic configuration models for UniFi MCP server."""
 
+from __future__ import annotations
+
 import importlib.util
 import logging
 import sys
@@ -93,11 +95,11 @@ class Settings(BaseSettings):
         """Resolve missing credentials from macOS Keychain after Pydantic loads."""
         self.network_controller = self._resolve_controller(
             "network-controller", self.network_controller, NetworkSettings, "8443"
-        )
-        self.access_controller = self._resolve_controller(
+        )  # type: ignore
+        self.access_controller = self._resolve_controller( # type: ignore
             "access-controller", self.access_controller, AccessSettings, "8444"
         )
-        self.local_api = self._resolve_controller(
+        self.local_api = self._resolve_controller(  # type: ignore
             "local-api", self.local_api, LocalSettings, "1234"
         )
 
@@ -157,7 +159,7 @@ class Settings(BaseSettings):
 
         # Rebuild the controller settings with resolved values
         if changed or controller is None:
-            return settings_class(**fields)
+            return settings_class(**fields)  # type: ignore
 
         return controller
 

@@ -16,6 +16,6 @@ def tool(func: Callable[..., Any]) -> Callable[..., Any]:
     # Store the tool instance as an attribute on the function
     # so it can be recognized by the server
     func = cast(Callable[..., Any], func)
-    setattr(func, '_fastmcp_tool', tool_instance)
+    setattr(func, "_fastmcp_tool", tool_instance)
 
     return func

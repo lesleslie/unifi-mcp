@@ -1,5 +1,7 @@
 """Base HTTP client for UniFi API interactions."""
 
+from __future__ import annotations
+
 from abc import ABC
 from typing import Any
 
@@ -79,8 +81,8 @@ class BaseUniFiClient(ABC):
             response = await self.client.post(login_url, json=credentials)
             response.raise_for_status()
 
-            # Extract CSRF token from response headers or cookies
-            self._csrf_token = self._extract_csrf_token(response)
+            # type: ignore  Extract CSRF token from response headers or cookies
+            self._csrf_token = self._extract_csrf_token(response)  # type: ignore
 
             # Mark as authenticated
             self._authenticated = True
@@ -192,7 +194,7 @@ class BaseUniFiClient(ABC):
         """Close the HTTP client."""
         await self.client.aclose()
 
-    async def __aenter__(self) -> "BaseUniFiClient":
+    async def __aenter__(self) -> BaseUniFiClient:
         """Async context manager entry."""
         return self
 
