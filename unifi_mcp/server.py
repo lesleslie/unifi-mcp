@@ -6,6 +6,7 @@ import sys
 from typing import Any
 
 from fastmcp import FastMCP
+from mcp_common.health import register_http_health_route
 
 # Check FastMCP rate limiting middleware availability (Phase 3.3 M2: improved pattern)
 RATE_LIMITING_AVAILABLE = (
@@ -45,12 +46,11 @@ def create_server(settings: Settings) -> FastMCP:
     )
 
     # HTTP health endpoint for Claude Code compatibility
-    @server.custom_route("/health", methods=["GET"])
-    async def health_check(request: Any) -> Any:
-        """HTTP health check endpoint for Claude Code `mcp list` compatibility."""
-        from starlette.responses import JSONResponse
-
-        return JSONResponse({"status": "ok", "service": "unifi", "version": "1.0.0"})
+    register_http_health_route(
+        server,
+        service_name="unifi",
+        version="1.0.0",
+    )
 
     @server.custom_route("/healthz", methods=["GET"])
     async def healthz_check(request: Any) -> Any:

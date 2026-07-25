@@ -115,3 +115,6 @@ exclude-deps = [
     "pytest-timeout",
     "ruff",
 ]
+
+[tool.uv.sources]
+mcp-common = { path = "/Users/les/Projects/mcp-common", editable = true }
