@@ -81,8 +81,8 @@ class BaseUniFiClient(ABC):
             response = await self.client.post(login_url, json=credentials)
             response.raise_for_status()
 
-            # type: ignore  Extract CSRF token from response headers or cookies
-            self._csrf_token = self._extract_csrf_token(response)  # type: ignore
+            # Extract CSRF token from response headers or cookies
+            self._csrf_token = self._extract_csrf_token(response)
 
             # Mark as authenticated
             self._authenticated = True

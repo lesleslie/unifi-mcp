@@ -95,11 +95,11 @@ class Settings(BaseSettings):
         """Resolve missing credentials from macOS Keychain after Pydantic loads."""
         self.network_controller = self._resolve_controller(
             "network-controller", self.network_controller, NetworkSettings, "8443"
-        )  # type: ignore
-        self.access_controller = self._resolve_controller( # type: ignore
+        )  # type: ignore[assignment]  # ty: ignore[invalid-argument-type]
+        self.access_controller = self._resolve_controller(  # type: ignore[assignment]  # ty: ignore[invalid-argument-type]
             "access-controller", self.access_controller, AccessSettings, "8444"
         )
-        self.local_api = self._resolve_controller(  # type: ignore
+        self.local_api = self._resolve_controller(  # type: ignore[assignment]  # ty: ignore[invalid-argument-type]
             "local-api", self.local_api, LocalSettings, "1234"
         )
 
@@ -141,7 +141,7 @@ class Settings(BaseSettings):
             if not fields.get(field_name):
                 value = resolve_controller_credential(controller_type, field_name, None)
                 if value:
-                    fields[field_name] = value
+                    fields[field_name] = value  # ty: ignore[invalid-assignment]
                     changed = True
 
         # If we still don't have the minimum required fields, return as-is
@@ -159,7 +159,7 @@ class Settings(BaseSettings):
 
         # Rebuild the controller settings with resolved values
         if changed or controller is None:
-            return settings_class(**fields)  # type: ignore
+            return settings_class(**fields)  # type: ignore[call-arg]  # ty: ignore[invalid-argument-type]
 
         return controller
 
