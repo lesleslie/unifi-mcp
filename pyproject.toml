@@ -10,7 +10,7 @@ dependencies = [
     "fastmcp>=3.4.0,<4",
     "keyring>=25.0",
     "mcp-common>=0.17.0",
-    "oneiric>=0.3.6",
+    "oneiric>=0.16.0",
     "pydantic[email]>=2.11.9",
 ]
 
