@@ -107,7 +107,7 @@ class Settings(BaseSettings):
         self,
         controller_type: str,
         controller: UniFiSettings | None,
-        settings_class: type,
+        settings_class: type[UniFiSettings],
         default_port: str,
     ) -> UniFiSettings | None:
         """Resolve controller credentials from keychain if missing.
@@ -169,7 +169,7 @@ class Settings(BaseSettings):
 
         # Rebuild the controller settings with resolved values
         if changed:
-            return settings_class(**fields)  # type: ignore[call-arg]
+            return settings_class(**fields)
 
         return controller
 

@@ -48,7 +48,7 @@ class UniFiMCPServer(BaseOneiricServerMixin):
         )
 
     @property
-    def config(self) -> UniFiConfig:  # type: ignore[override]
+    def config(self) -> UniFiConfig:
         """Return config with proper type annotation."""
         return self._config
 

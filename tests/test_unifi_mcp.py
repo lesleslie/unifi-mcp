@@ -33,13 +33,13 @@ async def test_network_client() -> None:
 
             # Test getting sites
             if authenticated:
-                sites = await client.get_sites()  # type: ignore
+                sites = await client.get_sites()
                 print(f"Found {len(sites)} sites")
 
                 # Test getting devices from the first site if available
                 if sites:
                     site_id = sites[0].get("name", "default")
-                    devices = await client.get_devices(site_id)  # type: ignore
+                    devices = await client.get_devices(site_id)
                     print(f"Found {len(devices)} devices in site '{site_id}'")
 
         except Exception as e:
@@ -72,7 +72,7 @@ async def test_access_client() -> None:
 
             # Test getting access points
             if authenticated:
-                access_points = await client.get_access_points()  # type: ignore
+                access_points = await client.get_access_points()
                 print(f"Found {len(access_points)} access points")
 
         except Exception as e:
