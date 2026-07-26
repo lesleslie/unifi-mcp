@@ -112,39 +112,49 @@ class Settings(BaseSettings):
     ) -> UniFiSettings | None:
         """Resolve controller credentials from keychain if missing.
 
-        Checks if a controller is partially or fully configured. If credentials
-        are missing from env/.env, attempts to fill them from macOS Keychain.
-        """
-        # Build a dict of what we have so far
-        if controller is not None:
-            fields = {
-                "host": controller.host,
-                "port": controller.port,
-                "username": controller.username,
-                "password": controller.password,
-                "site_id": controller.site_id,
-                "verify_ssl": controller.verify_ssl,
-                "timeout": controller.timeout,
-            }
-        else:
-            # Check if keychain has credentials for this controller type
-            fields = {
-                "host": None,
-                "port": int(default_port),
-                "username": None,
-                "password": None,
-            }
+        Only fills fields that are explicitly ``None``. Explicit empty strings
+        (e.g. ``password=""``) are preserved as a deliberate user choice rather
+        than treated as missing.
 
-        # Try to fill missing fields from keychain
+        When the caller did not provide a controller at all (``controller is
+        None``), this method does NOT auto-create one from keychain alone —
+        it returns ``None``. Auto-creation was problematic because tests and
+        any caller wanting to opt out of keychain resolution had no way to
+        signal that. To enable keychain-only setup, configure at least the
+        ``UNIFI__<CONTROLLER>__HOST`` env var (or pass a partially-filled
+        controller) and the keychain will fill in the remaining fields.
+        """
+        # If no controller was provided, do not auto-create from keychain.
+        # Returning None here preserves the documented "soft failure" mode
+        # and lets callers (including tests) explicitly opt out of keychain
+        # resolution by not configuring a controller at all.
+        if controller is None:
+            return None
+
+        # Build a dict of what we have so far
+        fields = {
+            "host": controller.host,
+            "port": controller.port,
+            "username": controller.username,
+            "password": controller.password,
+            "site_id": controller.site_id,
+            "verify_ssl": controller.verify_ssl,
+            "timeout": controller.timeout,
+        }
+
+        # Try to fill missing fields from keychain. Use ``is None`` rather
+        # than a truthy check so that explicit empty strings are preserved
+        # (tests legitimately set ``password=""`` to verify the masking path).
         changed = False
         for field_name in ("host", "username", "password"):
-            if not fields.get(field_name):
+            if fields.get(field_name) is None:
                 value = resolve_controller_credential(controller_type, field_name, None)
                 if value:
                     fields[field_name] = value
                     changed = True
 
-        # If we still don't have the minimum required fields, return as-is
+        # If we still don't have the minimum required fields, return the
+        # original controller unchanged (preserves explicit empty values).
         if (
             not fields.get("host")
             or not fields.get("username")
@@ -158,7 +168,7 @@ class Settings(BaseSettings):
             return controller
 
         # Rebuild the controller settings with resolved values
-        if changed or controller is None:
+        if changed:
             return settings_class(**fields)  # type: ignore[call-arg]
 
         return controller
