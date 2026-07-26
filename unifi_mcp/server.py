@@ -8,6 +8,8 @@ from typing import Any
 from fastmcp import FastMCP
 from mcp_common.health import register_http_health_route
 
+from unifi_mcp import __version__
+
 # Check FastMCP rate limiting middleware availability (Phase 3.3 M2: improved pattern)
 RATE_LIMITING_AVAILABLE = (
     importlib.util.find_spec("fastmcp.server.middleware.rate_limiting") is not None
@@ -49,7 +51,7 @@ def create_server(settings: Settings) -> FastMCP:
     register_http_health_route(
         server,
         service_name="unifi",
-        version="1.0.0",
+        version=__version__,
     )
 
     @server.custom_route("/healthz", methods=["GET"])
