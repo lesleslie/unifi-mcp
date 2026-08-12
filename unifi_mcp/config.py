@@ -93,13 +93,13 @@ class Settings(BaseSettings):
 
     def model_post_init(self, __context: Any) -> None:
         """Resolve missing credentials from macOS Keychain after Pydantic loads."""
-        self.network_controller = self._resolve_controller(
+        self.network_controller = self._resolve_controller(  # ty: ignore[invalid-assignment]
             "network-controller", self.network_controller, NetworkSettings, "8443"
         )
-        self.access_controller = self._resolve_controller(
+        self.access_controller = self._resolve_controller(  # ty: ignore[invalid-assignment]
             "access-controller", self.access_controller, AccessSettings, "8444"
         )
-        self.local_api = self._resolve_controller(
+        self.local_api = self._resolve_controller(  # ty: ignore[invalid-assignment]
             "local-api", self.local_api, LocalSettings, "1234"
         )
 
@@ -132,7 +132,7 @@ class Settings(BaseSettings):
             return None
 
         # Build a dict of what we have so far
-        fields = {
+        fields: dict[str, Any] = {
             "host": controller.host,
             "port": controller.port,
             "username": controller.username,
