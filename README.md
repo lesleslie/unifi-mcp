@@ -32,8 +32,8 @@ graph TB
     end
 
     subgraph "Tool Layer"
-        G[Network Tools<br/>get_sites, get_devices<br/>get_clients, get_wlans<br/>restart_device, toggle_ap]
-        H[Access Tools<br/>get_access_points<br/>get_users, unlock_door<br/>set_access_schedule]
+        G[Network Tools<br/>unifi_get_sites, unifi_get_devices<br/>unifi_get_clients, unifi_get_wlans<br/>unifi_restart_device, unifi_disable_ap<br/>unifi_enable_ap, unifi_get_statistics]
+        H[Access Tools<br/>unifi_get_access_points<br/>unifi_get_access_users, unifi_unlock_door<br/>unifi_set_access_schedule<br/>unifi_get_access_logs]
     end
 
     subgraph "Data Models"
@@ -70,11 +70,9 @@ graph TB
 
 ## Installation
 
-1. Install the required dependencies:
+1. Install the required dependencies (the project uses pyproject.toml with uv):
 
 ```bash
-pip install -r requirements.txt
-# Or if using pyproject.toml
 pip install uv && uv sync
 ```
 
@@ -88,112 +86,128 @@ pip install -e .
 
 ### Environment Variables
 
-You can configure the server using environment variables:
+You can configure the server using environment variables. The `Settings` class
+reads these names directly (no env_prefix is set, so do NOT prefix them with
+`UNIFI__` or `MCP_SERVER_` — those names are not bound):
 
 ```bash
 # Server configuration
-MCP_SERVER_HOST=127.0.0.1
-MCP_SERVER_PORT=8000
-MCP_DEBUG=true
+HOST=127.0.0.1
+PORT=8000
+DEBUG=true
 
 # Network Controller (optional)
-UNIFI__NETWORK_CONTROLLER__HOST=unifi.example.com
-UNIFI__NETWORK_CONTROLLER__PORT=8443
-UNIFI__NETWORK_CONTROLLER__USERNAME=admin
-UNIFI__NETWORK_CONTROLLER__PASSWORD=password
-UNIFI__NETWORK_CONTROLLER__SITE_ID=default
+NETWORK_CONTROLLER__HOST=unifi.example.com
+NETWORK_CONTROLLER__PORT=8443
+NETWORK_CONTROLLER__USERNAME=admin
+NETWORK_CONTROLLER__PASSWORD=<YOUR_PASSWORD_MIN_12_CHARS>  # placeholder — replace
+NETWORK_CONTROLLER__SITE_ID=default
 
 # Access Controller (optional)
-UNIFI__ACCESS_CONTROLLER__HOST=unifi-access.example.com
-UNIFI__ACCESS_CONTROLLER__PORT=8444
-UNIFI__ACCESS_CONTROLLER__USERNAME=admin
-UNIFI__ACCESS_CONTROLLER__PASSWORD=password
-UNIFI__ACCESS_CONTROLLER__SITE_ID=default
+ACCESS_CONTROLLER__HOST=unifi-access.example.com
+ACCESS_CONTROLLER__PORT=8444
+ACCESS_CONTROLLER__USERNAME=admin
+ACCESS_CONTROLLER__PASSWORD=<YOUR_PASSWORD_MIN_12_CHARS>  # placeholder — replace
+ACCESS_CONTROLLER__SITE_ID=default
 ```
 
 ### PyProject.toml Configuration
 
-Alternatively, you can configure the server in your `pyproject.toml`:
+Alternatively, you can configure the server in your `pyproject.toml` under the
+`[tool.unifi-mcp]` section (the canonical section used by the Oneiric CLI
+entry point):
 
 ```toml
 [tool.unifi-mcp]
-[tool.unifi-mcp.server]
-host = "127.0.0.1"
-port = 8000
-debug = false
-
-[tool.unifi-mcp.network_controller]
-host = "unifi.example.com"
-port = 8443
-username = "admin"
-password = "password"
-site_id = "default"
-
-[tool.unifi-mcp.access_controller]
-host = "unifi-access.example.com"
-port = 8444
-username = "admin"
-password = "password"
-site_id = "default"
+http_host = "127.0.0.1"
+http_port = 3038
+enable_http_transport = true
 ```
 
 ## Usage
 
 ### Running the Server
 
-```bash
-# Using the CLI
-python -m unifi_mcp start --host 127.0.0.1 --port 8000
+The active entry point is `python -m unifi_mcp`, which routes through
+`MCPServerCLIFactory`. Run it in the foreground with host/port/debug flags:
 
-# Or directly
-python -c "from unifi_mcp.main import main; main()"
+```bash
+# Foreground (blocks the terminal)
+python -m unifi_mcp --host 127.0.0.1 --port 8000
+
+# Or start in the background
+python -m unifi_mcp --start-mcp-server --host 127.0.0.1 --port 8000
+
+# Or run via the run_server() entry point
+python -c "from unifi_mcp.server import run_server; run_server()"
 ```
 
-### Available CLI Commands
+### Available CLI Flags
+
+The Typer CLI in `unifi_mcp/cli.py` exposes top-level lifecycle flags plus
+`config` and `test-connection` subcommands, but only the lifecycle flags are
+reachable via the documented entry point. The legacy `start`/`status`/subcommand
+names shown in older docs are NOT registered against `python -m unifi_mcp`
+(which uses `MCPServerCLIFactory`):
 
 ```bash
-# Start the server
-python -m unifi_mcp start --host 127.0.0.1 --port 8000 --debug
+# Start the server in the background (managed by ServerManager)
+python -m unifi_mcp --start-mcp-server --host 127.0.0.1 --port 8000 --debug
 
-# Check configuration
-python -m unifi_mcp config
+# Stop / restart / status (use the flag form, not a positional subcommand)
+python -m unifi_mcp --stop-mcp-server
+python -m unifi_mcp --restart-mcp-server --host 127.0.0.1 --port 8000
+python -m unifi_mcp --server-status
+```
 
-# Check server status
-python -m unifi_mcp status
+For connection diagnostics or detailed configuration dumps, use the legacy Typer
+entry point directly:
+
+```bash
+# Display the resolved Settings
+python -m unifi_mcp.cli config
 
 # Test connection to a controller
-python -m unifi_mcp test-connection network
-python -m unifi_mcp test-connection access
+python -m unifi_mcp.cli test-connection network
+python -m unifi_mcp.cli test-connection access
 ```
 
 ## MCP Tools Available
 
+The tools below are the FastMCP-exposed names (the `@server.tool()` decorator
+name). Inner helpers in `unifi_mcp/tools/network_tools.py` use the
+`get_unifi_*` form, but those are NOT the names clients call — always use the
+`unifi_`-prefixed names from the `@server.tool()` wrappers in
+`unifi_mcp/server.py`.
+
 ### Network Controller Tools
 
-- `get_unifi_sites`: Get all sites from the UniFi Network Controller
-- `get_unifi_devices`: Get all devices in a specific site
-- `get_unifi_clients`: Get all clients in a specific site
-- `get_unifi_wlans`: Get all WLANs in a specific site
-- `restart_unifi_device`: Restart a device by its MAC address
-- `disable_unifi_ap`: Disable an access point by its MAC address
-- `enable_unifi_ap`: Enable an access point by its MAC address
-- `get_unifi_statistics`: Get site statistics
+- `unifi_get_sites`: Get all sites from the UniFi Network Controller
+- `unifi_get_devices`: Get all devices in a specific site
+- `unifi_get_clients`: Get all clients in a specific site
+- `unifi_get_wlans`: Get all WLANs in a specific site
+- `unifi_restart_device`: Restart a device by its MAC address
+- `unifi_disable_ap`: Disable an access point by its MAC address
+- `unifi_enable_ap`: Enable an access point by its MAC address
+- `unifi_get_statistics`: Get site statistics
 
 ### Access Controller Tools
 
-- `get_unifi_access_points`: Get all access points
-- `get_unifi_access_users`: Get all users
-- `get_unifi_access_logs`: Get door access logs
-- `unlock_unifi_door`: Unlock a door
-- `set_unifi_access_schedule`: Set access schedule for a user
+- `unifi_get_access_points`: Get all access points
+- `unifi_get_access_users`: Get all users
+- `unifi_get_access_logs`: Get door access logs
+- `unifi_unlock_door`: Unlock a door
+- `unifi_set_access_schedule`: Set access schedule for a user
 
 ## Development
 
 ### Running Tests
 
 ```bash
-# Run the test script
-python tests/test_unifi_mcp.py
+# Run the pytest test suite (configured via pyproject.toml [tool.pytest.ini_options])
+pytest
+# Skip slow tests for fast feedback:
+pytest -m "not slow"
 ```
 
 ### Project Structure
@@ -201,11 +215,12 @@ python tests/test_unifi_mcp.py
 ```
 unifi_mcp/
 ├── __init__.py
-├── __main__.py
-├── main.py                 # Main application entry point
-├── server.py              # FastMCP server implementation
+├── __main__.py            # Oneiric CLI entry point (python -m unifi_mcp)
+├── cli.py                 # Legacy Typer CLI (reachable as python -m unifi_mcp.cli)
+├── server.py              # FastMCP server implementation + @server.tool() registrations
 ├── config.py              # Configuration management with Pydantic models
-├── cli.py                 # Typer-based CLI for management
+├── credentials.py         # macOS Keychain credential resolution
+├── main.py                # Convenience entry point
 ├── clients/               # API clients for UniFi Network, Access, and Local
 │   ├── __init__.py
 │   ├── base_client.py     # Base HTTP client with authentication handling
@@ -215,15 +230,15 @@ unifi_mcp/
 │   ├── __init__.py
 │   ├── network.py         # Network controller data models
 │   └── access.py          # Access controller data models
-├── tools/                 # MCP tools for UniFi operations
+├── tools/                 # Internal helpers used by the FastMCP tool wrappers
 │   ├── __init__.py
-│   ├── network_tools.py   # Network-specific tools
-│   └── access_tools.py    # Access-specific tools
+│   ├── network_tools.py   # Network-specific helpers (get_unifi_*, restart_*, ...)
+│   └── access_tools.py    # Access-specific helpers (get_unifi_access_*, unlock_*, ...)
 ├── utils/                 # Utility functions
 │   ├── __init__.py
-│   ├── retry_utils.py     # Retry logic with exponential backoff
-│   └── validators.py      # Input validation
-└── monitoring/            # Monitoring and health check utilities
+│   ├── process_utils.py   # ServerManager process lifecycle helpers
+│   └── retry_utils.py     # Retry logic with exponential backoff
+└── monitoring/            # Reserved for future monitoring/health helpers (currently empty)
 ```
 
 ## Security Considerations
