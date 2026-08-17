@@ -1,0 +1,376 @@
+{
+  "complexity": {
+    "Functions": [
+      {
+        "Name": "NetworkClient.authenticate",
+        "FilePath": "unifi_mcp/clients/network_client.py",
+        "StartLine": 19,
+        "StartColumn": 4,
+        "EndLine": 54,
+        "Metrics": {
+          "Complexity": 11,
+          "Nodes": 8,
+          "Edges": 16,
+          "NestingDepth": 3,
+          "IfStatements": 2,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 8,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "medium"
+      },
+      {
+        "Name": "_validate_unifi_credentials",
+        "FilePath": "unifi_mcp/config.py",
+        "StartLine": 248,
+        "StartColumn": 0,
+        "EndLine": 316,
+        "Metrics": {
+          "Complexity": 10,
+          "Nodes": 19,
+          "Edges": 27,
+          "NestingDepth": 3,
+          "IfStatements": 6,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 3,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "medium"
+      },
+      {
+        "Name": "AccessClient.authenticate",
+        "FilePath": "unifi_mcp/clients/access_client.py",
+        "StartLine": 42,
+        "StartColumn": 4,
+        "EndLine": 86,
+        "Metrics": {
+          "Complexity": 10,
+          "Nodes": 6,
+          "Edges": 13,
+          "NestingDepth": 2,
+          "IfStatements": 1,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 8,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "medium"
+      },
+      {
+        "Name": "Settings._resolve_controller",
+        "FilePath": "unifi_mcp/config.py",
+        "StartLine": 106,
+        "StartColumn": 4,
+        "EndLine": 174,
+        "Metrics": {
+          "Complexity": 8,
+          "Nodes": 16,
+          "Edges": 24,
+          "NestingDepth": 3,
+          "IfStatements": 7,
+          "LoopStatements": 1,
+          "ExceptionHandlers": 0,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "test_connection",
+        "FilePath": "unifi_mcp/cli.py",
+        "StartLine": 98,
+        "StartColumn": 0,
+        "EndLine": 128,
+        "Metrics": {
+          "Complexity": 8,
+          "Nodes": 10,
+          "Edges": 15,
+          "NestingDepth": 3,
+          "IfStatements": 4,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 3,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "main",
+        "FilePath": "unifi_mcp/cli.py",
+        "StartLine": 17,
+        "StartColumn": 0,
+        "EndLine": 67,
+        "Metrics": {
+          "Complexity": 8,
+          "Nodes": 11,
+          "Edges": 17,
+          "NestingDepth": 3,
+          "IfStatements": 5,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 2,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "retry_with_backoff",
+        "FilePath": "unifi_mcp/utils/retry_utils.py",
+        "StartLine": 80,
+        "StartColumn": 0,
+        "EndLine": 132,
+        "Metrics": {
+          "Complexity": 8,
+          "Nodes": 13,
+          "Edges": 19,
+          "NestingDepth": 5,
+          "IfStatements": 4,
+          "LoopStatements": 1,
+          "ExceptionHandlers": 3,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "Settings.get_masked_password",
+        "FilePath": "unifi_mcp/config.py",
+        "StartLine": 215,
+        "StartColumn": 4,
+        "EndLine": 245,
+        "Metrics": {
+          "Complexity": 7,
+          "Nodes": 13,
+          "Edges": 20,
+          "NestingDepth": 2,
+          "IfStatements": 6,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 0,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "Settings.validate_credentials_at_startup",
+        "FilePath": "unifi_mcp/config.py",
+        "StartLine": 176,
+        "StartColumn": 4,
+        "EndLine": 213,
+        "Metrics": {
+          "Complexity": 6,
+          "Nodes": 12,
+          "Edges": 18,
+          "NestingDepth": 1,
+          "IfStatements": 5,
+          "LoopStatements": 1,
+          "ExceptionHandlers": 0,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "_load_and_validate_settings",
+        "FilePath": "unifi_mcp/server.py",
+        "StartLine": 356,
+        "StartColumn": 0,
+        "EndLine": 376,
+        "Metrics": {
+          "Complexity": 6,
+          "Nodes": 9,
+          "Edges": 14,
+          "NestingDepth": 5,
+          "IfStatements": 3,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 2,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "BaseUniFiClient._make_request",
+        "FilePath": "unifi_mcp/clients/base_client.py",
+        "StartLine": 155,
+        "StartColumn": 4,
+        "EndLine": 191,
+        "Metrics": {
+          "Complexity": 5,
+          "Nodes": 9,
+          "Edges": 14,
+          "NestingDepth": 1,
+          "IfStatements": 4,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 0,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "BaseUniFiClient.authenticate",
+        "FilePath": "unifi_mcp/clients/base_client.py",
+        "StartLine": 59,
+        "StartColumn": 4,
+        "EndLine": 99,
+        "Metrics": {
+          "Complexity": 5,
+          "Nodes": 5,
+          "Edges": 8,
+          "NestingDepth": 3,
+          "IfStatements": 1,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 3,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "resolve_controller_credential",
+        "FilePath": "unifi_mcp/credentials.py",
+        "StartLine": 25,
+        "StartColumn": 0,
+        "EndLine": 57,
+        "Metrics": {
+          "Complexity": 5,
+          "Nodes": 10,
+          "Edges": 15,
+          "NestingDepth": 2,
+          "IfStatements": 3,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 1,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      },
+      {
+        "Name": "ServerManager.start_server",
+        "FilePath": "unifi_mcp/utils/process_utils.py",
+        "StartLine": 47,
+        "StartColumn": 4,
+        "EndLine": 79,
+        "Metrics": {
+          "Complexity": 5,
+          "Nodes": 6,
+          "Edges": 9,
+          "NestingDepth": 2,
+          "IfStatements": 1,
+          "LoopStatements": 0,
+          "ExceptionHandlers": 3,
+          "SwitchCases": 0
+        },
+        "RiskLevel": "low"
+      }
+    ],
+    "Summary": {
+      "TotalFunctions": 14,
+      "AverageComplexity": 7.285714285714286,
+      "MaxComplexity": 11,
+      "MinComplexity": 5,
+      "FilesAnalyzed": 16,
+      "LowRiskFunctions": 11,
+      "MediumRiskFunctions": 3,
+      "HighRiskFunctions": 0,
+      "ComplexityDistribution": {
+        "11-20": 1,
+        "2-5": 4,
+        "6-10": 9
+      }
+    },
+    "Warnings": null,
+    "Errors": null,
+    "GeneratedAt": "2026-08-16T23:09:05-07:00",
+    "Version": "1.5.0",
+    "Config": {
+      "exclude_patterns": [
+        "test_*.py",
+        "*_test.py"
+      ],
+      "include_patterns": [
+        "**/*.py"
+      ],
+      "low_threshold": 9,
+      "max_complexity": 0,
+      "medium_threshold": 19,
+      "min_complexity": 5,
+      "output_format": "json",
+      "recursive": false,
+      "show_details": false,
+      "sort_by": "complexity"
+    }
+  },
+  "dead_code": {
+    "files": null,
+    "summary": {
+      "total_files": 16,
+      "total_functions": 0,
+      "total_findings": 0,
+      "files_with_dead_code": 0,
+      "functions_with_dead_code": 0,
+      "critical_findings": 0,
+      "warning_findings": 0,
+      "info_findings": 0,
+      "findings_by_reason": {},
+      "total_blocks": 0,
+      "dead_blocks": 0,
+      "overall_dead_ratio": 0
+    },
+    "warnings": null,
+    "errors": null,
+    "generated_at": "2026-08-16T23:09:05-07:00",
+    "version": "1.5.0",
+    "config": {
+      "context_lines": 3,
+      "detect_after_break": true,
+      "detect_after_continue": true,
+      "detect_after_raise": true,
+      "detect_after_return": true,
+      "detect_unreachable_branches": true,
+      "exclude_patterns": [
+        "test_*.py",
+        "*_test.py"
+      ],
+      "ignore_patterns": [],
+      "include_patterns": [
+        "**/*.py"
+      ],
+      "min_severity": "warning",
+      "show_context": false,
+      "sort_by": "severity"
+    }
+  },
+  "summary": {
+    "total_files": 16,
+    "analyzed_files": 16,
+    "skipped_files": 0,
+    "complexity_enabled": true,
+    "dead_code_enabled": true,
+    "clone_enabled": false,
+    "cbo_enabled": false,
+    "deps_enabled": false,
+    "arch_enabled": false,
+    "deps_total_modules": 0,
+    "deps_modules_in_cycles": 0,
+    "deps_max_depth": 0,
+    "deps_main_sequence_deviation": 0,
+    "arch_compliance": 0,
+    "total_functions": 14,
+    "average_complexity": 7.285714285714286,
+    "high_complexity_count": 0,
+    "dead_code_count": 0,
+    "critical_dead_code": 0,
+    "warning_dead_code": 0,
+    "info_dead_code": 0,
+    "total_clones": 0,
+    "clone_pairs": 0,
+    "clone_groups": 0,
+    "code_duplication_percentage": 0,
+    "cbo_classes": 0,
+    "high_coupling_classes": 0,
+    "medium_coupling_classes": 0,
+    "average_coupling": 0,
+    "health_score": 92,
+    "grade": "A",
+    "complexity_score": 60,
+    "dead_code_score": 100,
+    "duplication_score": 100,
+    "coupling_score": 100,
+    "dependency_score": 100,
+    "architecture_score": 100
+  },
+  "generated_at": "2026-08-16T23:09:05.414727-07:00",
+  "duration_ms": 57,
+  "version": "1.5.0"
+}

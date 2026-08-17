@@ -1,6 +1,8 @@
 """UniFi MCP Server package."""
 
-__version__ = "0.1.0"
+from importlib.metadata import version as _importlib_version
+
+__version__ = _importlib_version("unifi-mcp")
 
 from unifi_mcp.clients.access_client import AccessClient
 from unifi_mcp.clients.network_client import NetworkClient
