@@ -1,5 +1,7 @@
 """Main FastMCP server for UniFi integration."""
 
+from __future__ import annotations
+
 import asyncio
 import importlib.util
 import logging
