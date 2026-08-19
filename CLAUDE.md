@@ -339,3 +339,62 @@ python -m crackerjack -t
 Prefer mocked controller coverage for most changes, and reserve live-controller checks for behavior that cannot be validated with fixtures.
 
 <!-- CRACKERJACK INTEGRATION END -->
+
+## Tool Profile System
+
+unifi-mcp gates tool registration at startup via the
+``UNIFI_TOOL_PROFILE`` environment variable. The dispatch surface lives at
+``unifi_mcp/tools/profiles.py`` and delegates to
+``mcp_common.tools.dispatch._apply_tool_profile`` (mcp-common 0.18.0+).
+
+**Profile tiers (Tier-B 2-tier mapping):**
+
+| Profile | Tools registered |
+|---------|------------------|
+| ``minimal`` | ``discover_tools`` meta-tool only |
+| ``full`` (default) | All 13 UniFi controller tools + ``discover_tools`` |
+| (omitted ``standard``) | n/a — 2-tier only, no value in 3-tier for 2-group repo |
+
+**Configuration:**
+
+```bash
+# Default (full — all 13 tools)
+unset UNIFI_TOOL_PROFILE
+
+# Minimal (only discover_tools + /healthz)
+export UNIFI_TOOL_PROFILE=minimal
+
+# Full explicitly
+export UNIFI_TOOL_PROFILE=full
+
+# Invalid value: raises InvalidProfileError (fail-loud)
+export UNIFI_TOOL_PROFILE=bogus
+```
+
+**Production path:** ``async def create_app(settings)`` in
+``unifi_mcp/server.py`` awaits ``apply_unifi_tool_profile(server, ...)``
+inside its event loop. The sync ``create_server(settings)`` wrapper calls
+``asyncio.run(create_app(...))`` for sync callers (CLI, ``__main__.py``).
+
+**Tool groups** (defined in ``_GROUP_REGISTRY``):
+
+| Group | Tools | Controller |
+|-------|-------|------------|
+| ``network_tools`` | 8 (sites, devices, clients, WLANs, device control, statistics) | UniFi Network Controller |
+| ``access_tools`` | 5 (access points, users, logs, door unlock, schedules) | UniFi Access Controller |
+
+Only controllers that are configured (client is not None) appear in the
+registration map. The ``/healthz`` HTTP route lives outside the W0
+dispatch and is always available regardless of profile.
+
+**Why ``_apply_tool_profile`` (async), NOT ``apply_tool_profile`` (sync):**
+The sync wrapper raises ``RuntimeError`` when called from inside a
+running event loop. ``create_app`` is async and runs under an event
+loop; using the sync wrapper would break any test that exercises the
+real production path. Tests in ``tests/unit/test_tool_profile.py``
+include AST guards that catch this regression at the source level
+(structural ``ast.Await(value=ast.Call(...))`` check, not just call
+count).
+
+For the full architecture rationale, see
+``docs/architecture/tool-profile-rationale.md``.

@@ -1,5 +1,6 @@
 """Main FastMCP server for UniFi integration."""
 
+import asyncio
 import importlib.util
 import logging
 import sys
@@ -38,10 +39,59 @@ from unifi_mcp.tools.network_tools import (
     get_unifi_wlans,
     restart_unifi_device,
 )
+from unifi_mcp.tools.profiles import apply_unifi_tool_profile
+
+
+def _run_async_safely(coro):
+    """Run an async coroutine, handling both sync and async caller contexts.
+
+    - No running loop: ``asyncio.run(coro)`` (standard path).
+    - Running loop: spawn a worker thread that runs ``asyncio.run(coro)``
+      on its own loop. Required because ``asyncio.run`` cannot be called
+      from inside a running event loop, and we cannot ``await`` from a
+      sync caller. Used by ``create_server`` (sync wrapper around
+      ``create_app``) so it works from both sync and async test contexts.
+    """
+    import concurrent.futures
+
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        # No running loop — straightforward path.
+        return asyncio.run(coro)
+    # Already in a loop (e.g. ``UniFiMCPServer.__init__`` called from an
+    # async test). Run on a private thread to keep ``asyncio.run`` valid.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(asyncio.run, coro)
+        return future.result()
 
 
 def create_server(settings: Settings) -> FastMCP:
-    """Create and configure the UniFi MCP server."""
+    """Create and configure the UniFi MCP server (sync wrapper).
+
+    Bridges to the async ``create_app`` via ``asyncio.run``. Works from
+    both sync contexts (CLI startup, ``__main__.py``) and async test
+    contexts (where a loop is already running) by routing through a
+    private thread when needed.
+
+    Tool profile dispatch is async because the W0 helper from
+    mcp-common 0.18.0 (``_apply_tool_profile``) is async. Per the
+    W2b.3 lesson, the sync ``apply_tool_profile`` wrapper raises
+    ``RuntimeError`` when called from inside a running event loop, so
+    the async path is the only correct entry point for any async caller.
+    """
+    return _run_async_safely(create_app(settings))
+
+
+async def create_app(settings: Settings) -> FastMCP:
+    """Create and configure the UniFi MCP server (async production path).
+
+    Async because the W0 tool profile dispatch helper is async.
+    Callers from sync contexts (CLI startup, ``get_app``, ``create_server``)
+    wrap with ``asyncio.run(create_app(...))``. Tests that exercise the
+    real async startup should call ``await create_app(...)`` directly so
+    any W2b.3-style regression in the production dispatch path is caught.
+    """
     # Initialize FastMCP server
     server = FastMCP(
         name="UniFi Controller MCP Server",
@@ -78,12 +128,23 @@ def create_server(settings: Settings) -> FastMCP:
     network_client = _create_network_client(settings)
     access_client = _create_access_client(settings)
 
-    # Register tools if clients are available
-    if network_client:
-        _register_network_tools(server, network_client)
-
-    if access_client:
-        _register_access_tools(server, access_client)
+    # Apply tool profile dispatch (UNIFI_TOOL_PROFILE env var).
+    #
+    # Replaces the previous direct ``_register_*_tools(...)`` calls. The
+    # W0 helper from mcp-common 0.18.0+ dispatches by group name and
+    # always registers the ``discover_tools`` meta-tool. The default
+    # (no env var) remains FULL = all 13 UniFi controller tools — the
+    # previous behavior is preserved when both controllers are configured.
+    #
+    # Per the W2b.3 keystone: this MUST be the async helper, NOT the
+    # sync ``apply_tool_profile`` wrapper (which raises RuntimeError in
+    # event loops and would silently break any test that runs
+    # ``create_app`` under an async context).
+    await apply_unifi_tool_profile(
+        server,
+        network_client=network_client,
+        access_client=access_client,
+    )
 
     return server
 
