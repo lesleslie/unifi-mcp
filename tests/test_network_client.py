@@ -133,7 +133,11 @@ class TestNetworkClient:
             await client.authenticate()
 
     async def test_authenticate_general_error(self):
-        """Test authentication with general error."""
+        """Test authentication with general error.
+
+        Non-network exceptions propagate as-is (post-TRY002/BLE001 cleanup);
+        only transport errors are wrapped in AuthenticationError.
+        """
         client = NetworkClient(
             host="unifi.example.com",
             port=8443,
@@ -144,7 +148,7 @@ class TestNetworkClient:
         # Mock the client's post method to raise a general exception
         client.client.post = AsyncMock(side_effect=Exception("General error"))
 
-        with pytest.raises(Exception, match="Authentication error: "):
+        with pytest.raises(Exception, match="General error"):
             await client.authenticate()
 
     async def test_get_sites(self):

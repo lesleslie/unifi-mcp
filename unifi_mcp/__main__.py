@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """UniFi MCP Server - Oneiric CLI Entry Point."""
 
 from datetime import UTC

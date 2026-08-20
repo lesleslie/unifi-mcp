@@ -39,9 +39,8 @@ def retry_async(
                 except exceptions as e:
                     last_exception = e
 
-                    if attempt == max_attempts - 1:  # Last attempt
-                        if last_exception:
-                            raise last_exception
+                    if attempt == max_attempts - 1 and last_exception:  # Last attempt
+                        raise last_exception
 
                     # Calculate delay with exponential backoff
                     delay = _calculate_delay(
@@ -116,9 +115,8 @@ async def retry_with_backoff(
         except exceptions as e:
             last_exception = e
 
-            if attempt == max_attempts - 1:  # Last attempt
-                if last_exception:
-                    raise last_exception
+            if attempt == max_attempts - 1 and last_exception:  # Last attempt
+                raise last_exception
 
             # Calculate delay with exponential backoff
             delay = _calculate_delay(

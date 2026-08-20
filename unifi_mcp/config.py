@@ -91,7 +91,7 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
-    def model_post_init(self, __context: Any) -> None:
+    def model_post_init(self, context: Any, /) -> None:
         """Resolve missing credentials from macOS Keychain after Pydantic loads."""
         self.network_controller = self._resolve_controller(  # ty: ignore[invalid-assignment]
             "network-controller", self.network_controller, NetworkSettings, "8443"

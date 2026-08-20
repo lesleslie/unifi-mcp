@@ -110,16 +110,20 @@ class TestSettings:
         assert settings.access_controller is not None
         assert settings.local_api is not None
 
-    def test_validate_credentials_at_startup_no_controllers(self):
-        """Test validation when no controllers are configured."""
+    def test_validate_credentials_at_startup_no_controllers(self, capsys):
+        """Test validation when no controllers are configured.
+
+        The contract (post-refactor 26cad4e) is "soft failure" — server starts
+        in limited mode and a warning is printed to stderr. It must not raise.
+        """
         settings = Settings()
 
-        # Should raise or exit when no controllers configured
         with patch("unifi_mcp.config.EXCEPTIONS_AVAILABLE", True):
-            from mcp_common.exceptions import ServerConfigurationError
+            # Should not raise — soft warning only
+            settings.validate_credentials_at_startup()
 
-            with pytest.raises(ServerConfigurationError):
-                settings.validate_credentials_at_startup()
+        captured = capsys.readouterr()
+        assert "No UniFi controllers configured" in captured.err
 
     def test_validate_credentials_at_startup_with_controllers(self):
         """Test validation with controllers configured."""

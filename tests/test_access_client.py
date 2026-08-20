@@ -137,7 +137,11 @@ class TestAccessClient:
             await client.authenticate()
 
     async def test_authenticate_general_error(self):
-        """Test authentication with general error."""
+        """Test authentication with general error.
+
+        Non-network exceptions propagate as-is (post-TRY002/BLE001 cleanup);
+        only transport errors are wrapped in AuthenticationError.
+        """
         client = AccessClient(
             host="access.example.com",
             port=8444,
@@ -148,7 +152,7 @@ class TestAccessClient:
         # Mock the client's get method to raise a general exception
         client.client.get = AsyncMock(side_effect=Exception("General error"))
 
-        with pytest.raises(Exception, match="Authentication error: "):
+        with pytest.raises(Exception, match="General error"):
             await client.authenticate()
 
     async def test_get_access_points(self):

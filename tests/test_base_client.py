@@ -53,12 +53,18 @@ class TestBaseUniFiClient:
         assert client.base_url == "https://test.example.com:9443"
 
     async def test_authenticate_not_implemented(self):
-        """Test that authenticate raises NotImplementedError."""
+        """Test that authenticate propagates NotImplementedError from the network layer."""
         client = BaseUniFiClient(
             host="unifi.example.com",
             port=8443,
             username="admin",
             password="password123",
+        )
+
+        # Mock the underlying HTTP post to raise NotImplementedError so the
+        # test is fully offline (no real DNS lookup).
+        client.client.post = AsyncMock(
+            side_effect=NotImplementedError,
         )
 
         with pytest.raises(NotImplementedError):

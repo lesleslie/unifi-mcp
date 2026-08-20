@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import logging
+import types
 from abc import ABC
-from typing import Any
+from typing import Any, Self
 
 import httpx
+
+logger = logging.getLogger(__name__)
 
 
 class AuthenticationError(Exception):
@@ -19,7 +23,6 @@ class AuthenticationError(Exception):
 class SessionExpiredError(Exception):
     """Session has expired and needs re-authentication."""
 
-    pass
 
 
 class BaseUniFiClient(ABC):
@@ -135,8 +138,9 @@ class BaseUniFiClient(ABC):
             logout_url = f"{self.base_url}/api/logout"
             response = await self.client.post(logout_url)
             response.raise_for_status()
-        except Exception:
-            pass  # Ignore logout errors
+        except httpx.HTTPError:
+            # Best-effort logout: log transport / HTTP failures and continue.
+            logger.exception("Logout request failed")
         finally:
             self._authenticated = False
             self._csrf_token = None
@@ -194,7 +198,7 @@ class BaseUniFiClient(ABC):
         """Close the HTTP client."""
         await self.client.aclose()
 
-    async def __aenter__(self) -> BaseUniFiClient:
+    async def __aenter__(self) -> Self:
         """Async context manager entry."""
         return self
 
@@ -202,7 +206,7 @@ class BaseUniFiClient(ABC):
         self,
         exc_type: type[BaseException] | None,
         exc_val: BaseException | None,
-        exc_tb: object | None,
+        exc_tb: types.TracebackType | None,
     ) -> None:
         """Async context manager exit."""
         await self.close()

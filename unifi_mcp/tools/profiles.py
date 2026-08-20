@@ -39,13 +39,13 @@ if TYPE_CHECKING:
 _GROUP_REGISTRY: list[tuple[str, str]] = [
     (
         "network_tools",
-        "Register the UniFi Network Controller tools "
-        "(sites, devices, clients, WLANs, device control, statistics).",
+        ("Register the UniFi Network Controller tools "
+        "(sites, devices, clients, WLANs, device control, statistics)."),
     ),
     (
         "access_tools",
-        "Register the UniFi Access Controller tools "
-        "(access points, users, logs, door unlock, schedules).",
+        ("Register the UniFi Access Controller tools "
+        "(access points, users, logs, door unlock, schedules)."),
     ),
 ]
 

@@ -511,7 +511,7 @@ def _display_startup_message(settings: Settings, features: list[str]) -> None:
         )
         for feature in features:
             print(f"   {feature}", file=sys.stderr)
-        print("", file=sys.stderr)
+        print(file=sys.stderr)
 
 
 def _run_server_instance(server: FastMCP, settings: Settings) -> None:

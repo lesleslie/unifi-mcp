@@ -80,7 +80,7 @@ def store_credential(controller_type: str, field: str, value: str) -> bool:
         logger.info("Stored credential '%s' in keychain", key)
         return True
     except Exception:
-        logger.error("Failed to store credential in keychain", exc_info=True)
+        logger.exception("Failed to store credential in keychain")
         return False
 
 

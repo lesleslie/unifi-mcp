@@ -4,7 +4,7 @@ from typing import Any
 
 import httpx
 
-from .base_client import BaseUniFiClient
+from .base_client import AuthenticationError, BaseUniFiClient
 
 
 class NetworkClient(BaseUniFiClient):
@@ -44,14 +44,13 @@ class NetworkClient(BaseUniFiClient):
                     self._csrf_token = csrf_token
                 return True
             else:
-                raise Exception(
-                    f"Authentication failed with status {response.status_code}"
+                raise AuthenticationError(
+                    f"Authentication failed with status {response.status_code}",
+                    status_code=response.status_code,
                 )
 
         except httpx.RequestError as e:
-            raise Exception(f"Network error during authentication: {e}")
-        except Exception as e:
-            raise Exception(f"Authentication error: {e}")
+            raise AuthenticationError(f"Network error during authentication: {e}") from e
 
     async def get_sites(self) -> list[dict[str, Any]]:
         """Get all sites from the UniFi controller."""

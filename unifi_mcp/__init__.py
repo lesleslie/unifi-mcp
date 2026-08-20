@@ -9,4 +9,4 @@ from unifi_mcp.clients.network_client import NetworkClient
 from unifi_mcp.config import Settings
 from unifi_mcp.server import create_server, run_server
 
-__all__ = ["create_server", "run_server", "Settings", "NetworkClient", "AccessClient"]
+__all__ = ["AccessClient", "NetworkClient", "Settings", "create_server", "run_server"]
