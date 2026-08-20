@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "unifi-mcp"
 version = "0.3.1"
@@ -119,6 +123,9 @@ exclude-deps = [
 
 [tool.uv.sources]
 mcp-common = { path = "/Users/les/Projects/mcp-common", editable = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["unifi_mcp"]
 
 [tool.crackerjack]
 # Baseline configuration (auto-bootstrapped 2026-08-20).
