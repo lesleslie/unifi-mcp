@@ -1,0 +1,17 @@
+{
+  "author": {
+    "name": "Bodai"
+  },
+  "description": "Bodai plugin for the unifi-mcp UniFi Network and Access Controller MCP server.",
+  "keywords": [
+    "bodai",
+    "mcp",
+    "unifi",
+    "network-controller",
+    "access-controller"
+  ],
+  "mcpServers": "./.mcp.json",
+  "name": "unifi",
+  "schema_version": "1.0.0",
+  "version": "0.1.0"
+}

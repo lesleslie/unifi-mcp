@@ -199,6 +199,10 @@ name). Inner helpers in `unifi_mcp/tools/network_tools.py` use the
 - `unifi_unlock_door`: Unlock a door
 - `unifi_set_access_schedule`: Set access schedule for a user
 
+## Installation via Bodai Marketplace
+
+This repo ships a Bodai Claude Code plugin manifest (`.claude-plugin/plugin.json`) plus a colocated `.mcp.json` and three slash commands in `commands/`. Register the marketplace once via `claude plugin marketplace add /Users/les/Projects/bodai-plugins`, then install with `claude plugin install unifi --marketplace bodai-plugins`. Once installed, the slash commands `/unifi-status`, `/unifi-clients`, and `/unifi-devices` are available alongside the `mcp__unifi__*` tools. The HTTP transport is hardcoded to `http://localhost:3038/mcp`; start the server with `python -m unifi_mcp --host 127.0.0.1 --port 3038` before invoking any of the tools.
+
 ## Development
 
 ### Running Tests

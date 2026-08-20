@@ -1,0 +1,6 @@
+{
+  "unifi": {
+    "type": "http",
+    "url": "http://localhost:3038/mcp"
+  }
+}
