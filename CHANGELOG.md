@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-08-21
+
+### Added
+
+- unifi-mcp: Adopt apply_tool_profile dispatch (W3.4, Tier-B 2-tier)
+- unifi: Bodai plugin conversion (manifest, mcp.json, slash commands)
+
+### Changed
+
+- unifi-mcp: Migrate build backend setuptools → hatchling
+
+### Fixed
+
+- bandit: Add `# nosec` annotations to subprocess + random.jitter calls
+- bandit: Correct target path unifi-mcp -> unifi_mcp + skip B105/6/7
+- tests: Annotate fixture passwords for bandit + betterleaks
+- unifi-mcp: Apply W3.4 round 1 review Minor items
+- unifi-mcp: Resolve 2 test failures + 23 ruff findings
+- unifi-mcp: Untrack .pyscn/reports/ artifacts
+
+### Documentation
+
+- QWEN: Replace literal 'password' placeholder with `<your-password-here>`
+
+### Internal
+
+- Gitignore runtime artifacts + untrack user-authorized cache files (bodai cleanup 2026-08-17)
+- gitignore: Untrack .pyscn/ (bodai 2026-08-20)
+- unifi-mcp: Bootstrap [tool.crackerjack] section + uv sync upgrade
+- unifi-mcp: Gitignore .lycheecache (file, not just dir)
+- unifi-mcp: Gitignore .lycheecache + .hypothesis
+- unifi-mcp: Untrack .lycheecache + .hypothesis runtime artifacts
+- Wave C cleanup — untrack 2 backup files, resolve sqlite merge, and finalize Wave B cleanup artifacts
+
 ## [0.3.1] - 2026-08-16
 
 ### Documentation
