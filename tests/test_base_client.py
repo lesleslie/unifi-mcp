@@ -17,7 +17,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
             verify_ssl=True,
             timeout=30,
         )
@@ -39,7 +39,7 @@ class TestBaseUniFiClient:
             host="test.example.com",
             port=9443,
             username="testuser",
-            password="testpass",
+            password="testpass"  # gitleaks:allow,
             verify_ssl=False,
             timeout=60,
         )
@@ -58,7 +58,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Mock the underlying HTTP post to raise NotImplementedError so the
@@ -76,7 +76,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Mock the client's request method
@@ -101,7 +101,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Mock the authenticate method
@@ -130,7 +130,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Set CSRF token
@@ -160,7 +160,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Mock responses: first 401, then success
@@ -190,7 +190,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Mock the client's request method with non-dict response
@@ -214,7 +214,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Mock the aclose method
@@ -231,7 +231,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Mock the close method
@@ -250,7 +250,7 @@ class TestBaseUniFiClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Mock the client's request method

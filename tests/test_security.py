@@ -200,7 +200,7 @@ class TestHTTPHeaderSecurity:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Set malicious CSRF token
@@ -228,7 +228,7 @@ class TestHTTPHeaderSecurity:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         # Check that User-Agent is set correctly
@@ -245,7 +245,7 @@ class TestRequestBodySanitization:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         client._authenticated = True
@@ -283,7 +283,7 @@ class TestAuthenticationSecurity:
             host="unifi.example.com",
             port=8443,
             username="",  # Empty username
-            password="",  # Empty password
+            password=""  # gitleaks:allow,  # Empty password
         )
         # Client is created but will fail when trying to authenticate
         assert client.username == ""
@@ -325,7 +325,7 @@ class TestURLSecurity:
                 host=host,
                 port=8443,
                 username="admin",
-                password="password123",
+                password="password123"  # gitleaks:allow,
             )
 
             # Verify base_url is properly formatted

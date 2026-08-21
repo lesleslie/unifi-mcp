@@ -41,7 +41,7 @@ class TestCreateServer:
         network_controller = NetworkSettings(
             host="unifi.example.com",
             username="admin",
-            password="password12345678",  # Long enough to pass validation
+            password="password12345678"  # gitleaks:allow,  # Long enough to pass validation
         )
         settings = Settings(network_controller=network_controller)
 
@@ -53,7 +53,7 @@ class TestCreateServer:
         access_controller = AccessSettings(
             host="access.example.com",
             username="admin",
-            password="password12345678",  # Long enough to pass validation
+            password="password12345678"  # gitleaks:allow,  # Long enough to pass validation
         )
         settings = Settings(access_controller=access_controller)
 
@@ -79,7 +79,7 @@ class TestCreateNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         settings = Settings(network_controller=network_controller)
 
@@ -106,7 +106,7 @@ class TestCreateAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         settings = Settings(access_controller=access_controller)
 
@@ -307,7 +307,7 @@ class TestBuildFeatureList:
         network_controller = NetworkSettings(
             host="unifi.example.com",
             username="admin",
-            password="password12345678",
+            password="password12345678"  # gitleaks:allow,
         )
         settings = Settings(network_controller=network_controller)
 
@@ -322,7 +322,7 @@ class TestBuildFeatureList:
         access_controller = AccessSettings(
             host="access.example.com",
             username="admin",
-            password="password12345678",
+            password="password12345678"  # gitleaks:allow,
         )
         settings = Settings(access_controller=access_controller)
 

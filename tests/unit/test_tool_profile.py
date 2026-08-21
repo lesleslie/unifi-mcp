@@ -510,12 +510,12 @@ async def test_create_app_full_profile_real_path(
         network_controller=NetworkSettings(
             host="unifi.example.com",
             username="admin",
-            password="password12345678",
+            password="password12345678"  # gitleaks:allow,
         ),
         access_controller=AccessSettings(
             host="access.example.com",
             username="admin",
-            password="password12345678",
+            password="password12345678"  # gitleaks:allow,
         ),
     )
     app: FastMCP = await create_app(settings)
@@ -548,12 +548,12 @@ async def test_create_app_minimal_profile_real_path(
         network_controller=NetworkSettings(
             host="unifi.example.com",
             username="admin",
-            password="password12345678",
+            password="password12345678"  # gitleaks:allow,
         ),
         access_controller=AccessSettings(
             host="access.example.com",
             username="admin",
-            password="password12345678",
+            password="password12345678"  # gitleaks:allow,
         ),
     )
     app: FastMCP = await create_app(settings)

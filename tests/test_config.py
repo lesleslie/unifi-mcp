@@ -23,7 +23,7 @@ class TestUniFiSettings:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         assert settings.host == "unifi.example.com"
         assert settings.port == 8443
@@ -42,7 +42,7 @@ class TestNetworkSettings:
         settings = NetworkSettings(
             host="unifi.example.com",
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         assert settings.port == 8443  # Default Network Controller port
 
@@ -55,7 +55,7 @@ class TestAccessSettings:
         settings = AccessSettings(
             host="unifi.example.com",
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         assert settings.port == 8444  # Default Access Controller port
 
@@ -68,7 +68,7 @@ class TestLocalSettings:
         settings = LocalSettings(
             host="unifi.example.com",
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         assert settings.port == 1234  # Example port, may vary
 
@@ -89,17 +89,17 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         access_controller = AccessSettings(
             host="access.example.com",
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         local_api = LocalSettings(
             host="local.example.com",
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
         settings = Settings(
             network_controller=network_controller,
@@ -130,7 +130,7 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="password12345678",  # 12+ chars to pass security validation
+            password="password12345678"  # gitleaks:allow,  # 12+ chars to pass security validation
         )
         settings = Settings(network_controller=network_controller)
 
@@ -143,7 +143,7 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="mySecretPassword123",
+            password="mySecretPassword123"  # gitleaks:allow,
         )
         settings = Settings(network_controller=network_controller)
 
@@ -156,7 +156,7 @@ class TestSettings:
         access_controller = AccessSettings(
             host="access.example.com",
             username="admin",
-            password="accessPass456",
+            password="accessPass456"  # gitleaks:allow,
         )
         settings = Settings(access_controller=access_controller)
 
@@ -169,7 +169,7 @@ class TestSettings:
         local_api = LocalSettings(
             host="local.example.com",
             username="admin",
-            password="localPass789",
+            password="localPass789"  # gitleaks:allow,
         )
         settings = Settings(local_api=local_api)
 
@@ -189,7 +189,7 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="",
+            password=""  # gitleaks:allow,
         )
         settings = Settings(network_controller=network_controller)
 
@@ -201,7 +201,7 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="short",
+            password="short"  # gitleaks:allow,
         )
         settings = Settings(network_controller=network_controller)
 
@@ -215,7 +215,7 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="mySecurePassword12345",
+            password="mySecurePassword12345"  # gitleaks:allow,
         )
         settings = Settings(network_controller=network_controller)
 
@@ -236,7 +236,7 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="password123",
+            password="password123"  # gitleaks:allow,
         )
 
         settings = Settings(network_controller=network_controller)
@@ -250,7 +250,7 @@ class TestSettings:
         access_controller = AccessSettings(
             host="access.example.com",
             username="admin",
-            password="secret456",
+            password="secret456"  # gitleaks:allow,
         )
 
         settings = Settings(access_controller=access_controller)
@@ -263,7 +263,7 @@ class TestSettings:
         local_api = LocalSettings(
             host="local.example.com",
             username="admin",
-            password="local789",
+            password="local789"  # gitleaks:allow,
         )
 
         settings = Settings(local_api=local_api)
@@ -283,7 +283,7 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="",
+            password=""  # gitleaks:allow,
         )
 
         settings = Settings(network_controller=network_controller)
@@ -296,7 +296,7 @@ class TestSettings:
         network_controller = NetworkSettings(
             host="network.example.com",
             username="admin",
-            password="abc",  # Less than 4 chars
+            password="abc"  # gitleaks:allow,  # Less than 4 chars
         )
 
         settings = Settings(network_controller=network_controller)
@@ -314,7 +314,7 @@ class TestSettings:
                 network_controller = NetworkSettings(
                     host="network.example.com",
                     username="admin",
-                    password="password123",
+                    password="password123"  # gitleaks:allow,
                 )
 
                 settings = Settings(network_controller=network_controller)
@@ -336,7 +336,7 @@ class TestValidateUniFiCredentials:
         _validate_unifi_credentials(
             controller_name="Test Controller",
             username="admin",
-            password="password12345678",  # Long enough to pass basic validation
+            password="password12345678"  # gitleaks:allow,  # Long enough to pass basic validation
         )
 
     def test_validate_credentials_empty_username(self):
@@ -347,7 +347,7 @@ class TestValidateUniFiCredentials:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="",
-                        password="password123",
+                        password="password123"  # gitleaks:allow,
                     )
                     mock_exit.assert_called_once_with(1)
 
@@ -359,7 +359,7 @@ class TestValidateUniFiCredentials:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="   ",
-                        password="password123",
+                        password="password123"  # gitleaks:allow,
                     )
                     mock_exit.assert_called_once_with(1)
 
@@ -371,7 +371,7 @@ class TestValidateUniFiCredentials:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="admin",
-                        password="",
+                        password=""  # gitleaks:allow,
                     )
                     mock_exit.assert_called_once_with(1)
 
@@ -383,7 +383,7 @@ class TestValidateUniFiCredentials:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="admin",
-                        password="   ",
+                        password="   "  # gitleaks:allow,
                     )
                     mock_exit.assert_called_once_with(1)
 
@@ -396,7 +396,7 @@ class TestValidateUniFiCredentials:
                     _validate_unifi_credentials(
                         controller_name="Test Controller",
                         username="admin",
-                        password="pass",  # Less than 8 chars
+                        password="pass"  # gitleaks:allow,  # Less than 8 chars
                     )
 
     def test_validate_credentials_with_exceptions_available(self):
