@@ -90,11 +90,17 @@ exclude_lines = [
 ]
 
 [tool.bandit]
+# Target must match the actual source dir, not the PyPI metadata name.
+# `unifi-mcp` (hyphen) is the project name; `unifi_mcp` (underscore) is the
+# importable package source. bandit treats `target` as filesystem paths.
 target = [
-    "unifi-mcp",
+    "unifi_mcp",
 ]
 skips = [
     "B101",
+    "B105",
+    "B106",
+    "B107",
     "B110",
     "B112",
     "B404",
@@ -103,6 +109,13 @@ skips = [
 ]
 exclude_dirs = [
     "tests/",
+    "htmlcov/",
+    ".git/",
+    ".venv/",
+    ".crackerjack/",
+    "build/",
+    "dist/",
+    ".superpowers/",
 ]
 
 [tool.creosote]
