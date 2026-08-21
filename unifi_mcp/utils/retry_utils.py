@@ -71,7 +71,7 @@ def _calculate_delay(
 
     # Add jitter to prevent thundering herd
     if jitter:
-        delay = delay * (0.5 + random.random() * 0.5)
+        delay = delay * (0.5 + random.random() * 0.5)  # nosec B311 - jitter for retry backoff, not security-sensitive
 
     return delay
 

@@ -2,7 +2,7 @@
 
 import os
 import signal
-import subprocess
+import subprocess  # nosec B404 - documented subprocess usage in ServerManager
 import sys
 import time
 from pathlib import Path
@@ -65,7 +65,7 @@ class ServerManager:
         ]
 
         # Start the process in the background
-        process = subprocess.Popen(command, env=env, close_fds=True)
+        process = subprocess.Popen(command, env=env, close_fds=True)  # nosec B603 - Popen with explicit env and no shell, validated by caller
 
         # Write the new PID to the file
         try:
