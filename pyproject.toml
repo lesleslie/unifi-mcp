@@ -9,7 +9,7 @@ description = "Unofficial MCP server for the UniFi Site Manager, Access, and Net
 authors = [
     { name = "Les Leslie", email = "les@wedgwoodwebworks.com" },
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
     "fastmcp>=3.4.0,<4",
     "keyring>=25.0",
