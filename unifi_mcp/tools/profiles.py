@@ -39,13 +39,17 @@ if TYPE_CHECKING:
 _GROUP_REGISTRY: list[tuple[str, str]] = [
     (
         "network_tools",
-        ("Register the UniFi Network Controller tools "
-        "(sites, devices, clients, WLANs, device control, statistics)."),
+        (
+            "Register the UniFi Network Controller tools "
+            "(sites, devices, clients, WLANs, device control, statistics)."
+        ),
     ),
     (
         "access_tools",
-        ("Register the UniFi Access Controller tools "
-        "(access points, users, logs, door unlock, schedules)."),
+        (
+            "Register the UniFi Access Controller tools "
+            "(access points, users, logs, door unlock, schedules)."
+        ),
     ),
 ]
 
@@ -96,16 +100,12 @@ def _build_registration_map(
     mapping: dict[str, Callable[[FastMCP], Awaitable[None] | None]] = {}
     if network_client is not None:
         nc = network_client
-        mapping["network_tools"] = lambda app, _nc=nc: _register_network_tools(
-            app, _nc
-        )
+        mapping["network_tools"] = lambda app, _nc=nc: _register_network_tools(app, _nc)
     else:
         mapping["network_tools"] = _noop
     if access_client is not None:
         ac = access_client
-        mapping["access_tools"] = lambda app, _ac=ac: _register_access_tools(
-            app, _ac
-        )
+        mapping["access_tools"] = lambda app, _ac=ac: _register_access_tools(app, _ac)
     else:
         mapping["access_tools"] = _noop
     return mapping

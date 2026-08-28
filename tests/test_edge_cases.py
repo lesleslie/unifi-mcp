@@ -27,7 +27,7 @@ class TestNetworkTimeouts:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
             timeout=1,  # Very short timeout
         )
 
@@ -47,7 +47,7 @@ class TestNetworkTimeouts:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
             timeout=1,
         )
 
@@ -73,7 +73,7 @@ class TestConnectionFailures:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -92,7 +92,7 @@ class TestConnectionFailures:
             host="nonexistent.invalid",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -111,7 +111,7 @@ class TestConnectionFailures:
             host="192.168.255.255",  # Unreachable IP
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -134,7 +134,7 @@ class TestHTTPErrorHandling:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -157,7 +157,7 @@ class TestHTTPErrorHandling:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -180,7 +180,7 @@ class TestHTTPErrorHandling:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -203,7 +203,7 @@ class TestHTTPErrorHandling:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -226,7 +226,7 @@ class TestHTTPErrorHandling:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -253,7 +253,7 @@ class TestMalformedResponses:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -275,7 +275,7 @@ class TestMalformedResponses:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -298,7 +298,7 @@ class TestMalformedResponses:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -320,7 +320,7 @@ class TestMalformedResponses:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True
@@ -443,7 +443,7 @@ class TestConcurrentRequests:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client.authenticate = AsyncMock(return_value=True)
@@ -500,7 +500,7 @@ class TestStateCorruption:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Set corrupted CSRF token
@@ -528,7 +528,7 @@ class TestStateCorruption:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Set corrupted state - authenticated but no CSRF token
@@ -565,7 +565,7 @@ class TestSSLCertificateErrors:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
             verify_ssl=False,  # Allow self-signed
         )
 
@@ -588,7 +588,7 @@ class TestSSLCertificateErrors:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
             verify_ssl=True,
         )
 
@@ -616,7 +616,7 @@ class TestRateLimiting:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         client._authenticated = True

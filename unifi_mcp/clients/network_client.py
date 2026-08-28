@@ -50,7 +50,9 @@ class NetworkClient(BaseUniFiClient):
                 )
 
         except httpx.RequestError as e:
-            raise AuthenticationError(f"Network error during authentication: {e}") from e
+            raise AuthenticationError(
+                f"Network error during authentication: {e}"
+            ) from e
 
     async def get_sites(self) -> list[dict[str, Any]]:
         """Get all sites from the UniFi controller."""

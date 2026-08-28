@@ -17,7 +17,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
             verify_ssl=True,
             timeout=30,
         )
@@ -39,7 +39,7 @@ class TestNetworkClient:
             host="test.example.com",
             port=9443,
             username="testuser",
-            password="testpass"  # gitleaks:allow,
+            password="testpass",  # gitleaks:allow
             verify_ssl=False,
             timeout=60,
         )
@@ -59,7 +59,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's post method
@@ -82,7 +82,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's post method with CSRF token
@@ -105,7 +105,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's post method with failure status
@@ -123,7 +123,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's post method to raise RequestError
@@ -142,7 +142,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's post method to raise a general exception
@@ -157,7 +157,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -176,7 +176,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method with empty response
@@ -193,7 +193,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method with non-list data
@@ -210,7 +210,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -231,7 +231,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -252,7 +252,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -273,7 +273,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -294,7 +294,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -317,7 +317,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -338,7 +338,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -359,7 +359,7 @@ class TestNetworkClient:
             host="unifi.example.com",
             port=8443,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method

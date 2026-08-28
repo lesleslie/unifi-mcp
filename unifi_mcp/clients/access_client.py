@@ -82,7 +82,9 @@ class AccessClient(BaseUniFiClient):
                 )
 
         except httpx.RequestError as e:
-            raise AuthenticationError(f"Network error during authentication: {e}") from e
+            raise AuthenticationError(
+                f"Network error during authentication: {e}"
+            ) from e
 
     async def get_access_points(self) -> list[dict[str, Any]]:
         """Get all access points and door devices from the UniFi Access Controller.

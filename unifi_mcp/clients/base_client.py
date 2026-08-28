@@ -24,7 +24,6 @@ class SessionExpiredError(Exception):
     """Session has expired and needs re-authentication."""
 
 
-
 class BaseUniFiClient(ABC):
     """Base client for UniFi API interactions."""
 

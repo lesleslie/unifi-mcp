@@ -17,7 +17,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
             verify_ssl=True,
             timeout=30,
         )
@@ -39,7 +39,7 @@ class TestAccessClient:
             host="test.example.com",
             port=9444,
             username="testuser",
-            password="testpass"  # gitleaks:allow,
+            password="testpass",  # gitleaks:allow
             verify_ssl=False,
             timeout=60,
         )
@@ -59,7 +59,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's get method (Access uses Bearer token, not POST)
@@ -85,7 +85,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's get method with 201 status
@@ -108,7 +108,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's get method with failure status
@@ -127,7 +127,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's get method to raise RequestError
@@ -146,7 +146,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the client's get method to raise a general exception
@@ -161,7 +161,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -180,7 +180,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method with empty response
@@ -197,7 +197,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method with non-list data
@@ -214,7 +214,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -235,7 +235,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -256,7 +256,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -279,7 +279,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -304,7 +304,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -325,7 +325,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
@@ -346,7 +346,7 @@ class TestAccessClient:
             host="access.example.com",
             port=8444,
             username="admin",
-            password="password123"  # gitleaks:allow,
+            password="password123",  # gitleaks:allow
         )
 
         # Mock the _make_request method
