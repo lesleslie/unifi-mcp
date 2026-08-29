@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "unifi-mcp"
-version = "0.5.0"
+version = "0.5.1"
 description = "Unofficial MCP server for the UniFi Site Manager, Access, and Network APIs"
 authors = [
     { name = "Les Leslie", email = "les@wedgwoodwebworks.com" },
@@ -133,9 +133,6 @@ exclude-deps = [
     "pytest-timeout",
     "ruff",
 ]
-
-[tool.uv.sources]
-mcp-common = { path = "/Users/les/Projects/mcp-common", editable = true }
 
 [tool.hatch.build.targets.wheel]
 packages = ["unifi_mcp"]
