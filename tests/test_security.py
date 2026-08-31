@@ -2,7 +2,7 @@
 
 from unittest.mock import AsyncMock, Mock
 
-import httpx
+import httpx2 as httpx
 import pytest
 
 from unifi_mcp.clients.base_client import BaseUniFiClient

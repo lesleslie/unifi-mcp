@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "unifi-mcp"
-version = "0.5.1"
+version = "0.5.2"
 description = "Unofficial MCP server for the UniFi Site Manager, Access, and Network APIs"
 authors = [
     { name = "Les Leslie", email = "les@wedgwoodwebworks.com" },
@@ -12,6 +12,7 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "fastmcp>=3.4.0,<4",
+    "httpx2>=0.28.1",
     "keyring>=25.0",
     "mcp-common>=0.18.0",
     "oneiric>=0.16.0",

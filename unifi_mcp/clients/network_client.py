@@ -2,7 +2,7 @@
 
 from typing import Any
 
-import httpx
+import httpx2 as httpx
 
 from .base_client import AuthenticationError, BaseUniFiClient
 

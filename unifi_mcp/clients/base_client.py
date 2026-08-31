@@ -7,7 +7,7 @@ import types
 from abc import ABC
 from typing import Any, Self
 
-import httpx
+import httpx2 as httpx
 
 logger = logging.getLogger(__name__)
 
