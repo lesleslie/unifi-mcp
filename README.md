@@ -264,3 +264,7 @@ If you encounter connection issues:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+Built on [Oneiric](https://github.com/lesleslie/oneiric) for runtime configuration
+and [mcp-common](https://github.com/lesleslie/mcp-common) for the FastMCP
+baseline. [Crackerjack](https://github.com/lesleslie/crackerjack) gates every commit.

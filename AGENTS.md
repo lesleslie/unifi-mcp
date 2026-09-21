@@ -27,10 +27,6 @@ History is currently empty; adopt Conventional Commit prefixes (`feat:`, `fix:`,
 
 Load configuration through environment variables or the `[tool.unifi-mcp]` table in `pyproject.toml`. Keep secrets in ignored `.env` files, enable SSL verification when targeting production controllers, and restrict exposed ports to trusted networks before deploying the server.
 
-## Bodai integration
-
-When installed alongside the [Bodai ecosystem](https://github.com/lesleslie/bodai),
-unifi-mcp follows the shared cross-repo conventions. See `CLAUDE.md`
-("Bodai integration" section) for the full convention list. No
-Bodai-specific code is imported at runtime — integration is purely via
-shared conventions.
+Built on [Oneiric](https://github.com/lesleslie/oneiric) for runtime configuration
+and [mcp-common](https://github.com/lesleslie/mcp-common) for the FastMCP
+baseline. [Crackerjack](https://github.com/lesleslie/crackerjack) gates every commit.
