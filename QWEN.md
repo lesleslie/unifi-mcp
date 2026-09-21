@@ -140,3 +140,14 @@ python tests/test_unifi_mcp.py
 - Use appropriate firewall rules to restrict access to the MCP server
 - Enable SSL/TLS if the server is exposed to untrusted networks
 - Regularly update dependencies to address security vulnerabilities
+
+## Bodai integration
+
+When installed alongside the [Bodai ecosystem](https://github.com/lesleslie/bodai),
+unifi-mcp follows the shared cross-repo conventions: Crackerjack for CI/CD
+quality gates, the four mcp-common baseline tools (`discover_tools`,
+`get_liveness`, `get_readiness`, `health_check_all`), and the MCP wiring
+discipline documented in
+`mahavishnu/.claude/decisions/mcp-backend-wiring-discipline.md`. No
+Bodai-specific code is imported at runtime — integration is purely via
+shared conventions.
