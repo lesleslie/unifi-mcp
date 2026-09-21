@@ -1,14 +1,12 @@
 {
   "author": {
-    "name": "Bodai"
+    "name": "Wedgwood Web Works"
   },
-  "description": "Bodai plugin for the unifi-mcp UniFi Network and Access Controller MCP server.",
+  "description": "Plugin for the unifi-mcp UniFi Network and Access Controller MCP server.",
   "keywords": [
-    "bodai",
     "mcp",
     "unifi",
-    "network-controller",
-    "access-controller"
+    "network"
   ],
   "mcpServers": "./.mcp.json",
   "name": "unifi",
