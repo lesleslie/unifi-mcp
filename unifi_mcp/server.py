@@ -106,13 +106,6 @@ async def create_app(settings: Settings) -> FastMCP:
         version=__version__,
     )
 
-    @server.custom_route("/healthz", methods=["GET"])
-    async def healthz_check(request: Any) -> Any:
-        """Kubernetes-style health check endpoint."""
-        from starlette.responses import JSONResponse
-
-        return JSONResponse({"status": "ok"})
-
     # Add rate limiting middleware to protect UniFi API from excessive requests
     if RATE_LIMITING_AVAILABLE:
         from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware

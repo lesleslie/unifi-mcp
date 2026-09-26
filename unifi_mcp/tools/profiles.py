@@ -8,7 +8,7 @@ Profile tiers (2-tier, Tier-B — unifi-mcp has 2 controller groups with
 ~13 tools total, so a 3-tier split adds no value):
 
     MINIMAL:  No controller tool groups registered (only ``discover_tools``
-              meta-tool + ``/healthz`` HTTP route).
+              meta-tool + ``/health`` HTTP route).
     FULL:     All 13 UniFi Controller tools across 2 groups
               (``network_tools`` + ``access_tools``).
               Default behavior — matches pre-refactor inline registration.
@@ -145,7 +145,7 @@ async def apply_unifi_tool_profile(
     async context, so this async path is the only correct entry point.
 
     No tools are mandatory at any profile level for unifi-mcp — every
-    controller tool group is opt-in per profile. The ``/healthz`` HTTP
+    controller tool group is opt-in per profile. The ``/health`` HTTP
     route lives outside the W0 dispatch (registered via
     ``mcp_common.health.register_http_health_route``), so it is always
     available regardless of profile. We pass empty sets explicitly to

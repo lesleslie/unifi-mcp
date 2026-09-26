@@ -282,7 +282,7 @@ def test_mandatory_tools_invariant() -> None:
 
     No tools are mandatory at any profile level for unifi-mcp — every
     tool group (including any future health-related tools) is opt-in
-    per profile. The /healthz HTTP route lives outside the W0 dispatch
+    per profile. The /health HTTP route lives outside the W0 dispatch
     (registered via ``mcp_common.health.register_http_health_route``)
     so it is always available regardless of profile.
 
